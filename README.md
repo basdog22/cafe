@@ -1,3 +1,3 @@
 # cafe
 
-Application that manages Menu, Orders, Customers, ect 
+Cafe order management system (Menu, Orders, Customers, ect)
