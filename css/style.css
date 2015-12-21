@@ -1,34 +1,69 @@
 .navbar-fixed {
     top: 0;
     z-index: 100;
-  	position: fixed;
+    position: fixed;
     width: 100%;
 }
-
-#body {   
-	margin-top: 100px;
+#body{   
+    margin-top: 40px;
+	display: block;
+	margin-right: 30px;
 }
-
 .fat {
 	font-size: 120%;
 	font-weight: bold;
 }
-
-#tab {
+#tab{
 	position:relative;
 	height: 50px;
 	width:100%;
 	margin-top: -10px;
 }
-
-#tab_in {
-	position:relative; 
-	padding-top:20px;
-	padding-bottom: 20px;
+#tab_in{
+		position:relative; 
+		padding-top:20px;
+        padding-bottom: 20px;
+}
+#ti{
+	margin-top: 10px;
+	margin-left: 10px;
+}
+.left{
+	height: 100%;
+	width: 10%;
+	float: left;
+	position: relative;
+}
+.left_tab{
+	position: fixed;
+	background: rgba(0,0,0,0.15);
+	border-radius: 2px;
+	margin-top: 8%;
+	margin-left: 3%;
+	
+}
+.create_order{
+	float:left;
+	width: 55%;
+}
+#create_page{
+	width: 43%;
+	float:right;
+	margin-right: 1%;
+	margin-top: 2%;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button{
+    -webkit-appearance: none !important;
+    margin: 0; 
+}
+input[type="number"]{-moz-appearance:textfield;}
+#cus{
+	height: 50px;
+	width: 30%;
+}
+.bnum{
+	font-size: 26px;
+	font-family:Georgia,Times;
 }
 
-#cusid {
-	position: absolute;
-	margin-left: calc(52.1%);
-	z-index:1;
-}
