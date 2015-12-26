@@ -5,18 +5,36 @@
 	$sql_cusinfo = "SELECT customer_id,CONCAT(firstname,' ',lastname) FROM customer_info ORDER BY firstname, lastname;";
 	$result_cusinfo = $mysql->query($sql_cusinfo);
 ?>
-		<form action='index.php?page=create_order' method ='post'>
+		<form id='order_table' action='index.php?page=create_order' method ='post'>
 			<div class='big'><b>Customer:</b>
-				<select name='cus_id' id='cus' class='width-6'>
-					<option value=''>--</option>
+				<select name='cus_id' id='cus'>
+					<option value='0'>--</option>
 					<?php 
 					while($row = $mysql->fetch($result_cusinfo)) {
 						echo "<option value=$row[0]>$row[1] @$row[0]</option>";
 					}?>
 				</select>
 			</div>
+<script>
+	function reset(text) {  
+       if (confirm(text)) {  
+             alert("Reset OK");  
+			 document.getElementById("order_table").reset();
+         }  
+    }  	
+</script>
+			<nav>
+			<ul>
+				<li><a>CreateOpt</a>
+					<ul>
+						<li><a onclick='document.getElementById("order_table").submit()'>Create</a></li>
+						<li><a onclick='reset("Do you want to reset this order?")'>Reset</a></li>
+					</ul>
+				</li>
+			</ul>
+			</nav>
 			<div class='create_order'>
-			<table class ='table-stripped'>
+				<table class ='table-stripped'>
 	<?php
 		while($row_fcata = $mysql->fetch($result_fcata)) {
 			$cata_id = $row_fcata['catalog_id']; 
@@ -32,36 +50,51 @@
 	?>
 				<script>
 				function a<?php echo $row_finfo['food_id'];?>(){ 
-				var x=document.getElementById(<?php echo $row_finfo['food_id'];?>).value; 
-				if(x.length==0){ x=0; }
-				document.getElementById(<?php echo (int)$row_finfo['food_id'];?>).value = parseInt(x)+1;
+					var x=document.getElementById(<?php echo $row_finfo['food_id'];?>).value; 
+					if(x.length==0){ x=0; }
+					if(x < 999){
+						document.getElementById(<?php echo (int)$row_finfo['food_id'];?>).value = parseInt(x)+1;
+					}
 				}
 				function m<?php echo $row_finfo['food_id'];?>(){ 
-				var x=document.getElementById(<?php echo $row_finfo['food_id'];?>).value; 
-				document.getElementById(<?php echo (int)$row_finfo['food_id'];?>).value = parseInt(x)-1;
+					var x=document.getElementById(<?php echo $row_finfo['food_id'];?>).value;
+					if(x > 0){
+						document.getElementById(<?php echo (int)$row_finfo['food_id'];?>).value = parseInt(x)-1;
+					}
+				}
+				function vis<?php echo $row_finfo['food_id'];?>(){
+					document.getElementById('l<?php echo $row_finfo['food_id'];?>').style.visibility = "visible";
+					document.getElementById('r<?php echo $row_finfo['food_id'];?>').style.visibility = "visible";
+				}
+				function check<?php echo $row_finfo['food_id'];?>(){
+					var q = document.getElementById('<?php echo $row_finfo['food_id'];?>').value;
+					if (q <= 0 || q != parseInt(q)){
+						document.getElementById('<?php echo $row_finfo['food_id'];?>').value = '';
+						document.getElementById('<?php echo $row_finfo['food_id'];?>').style.backgroundColor = "white";
+					}else{
+						document.getElementById('<?php echo $row_finfo['food_id'];?>').style.backgroundColor = "rgba(10, 135, 84, 0.13)";
+					}
+				}
+				function hide<?php echo $row_finfo['food_id'];?>(){
+					document.getElementById('l<?php echo $row_finfo['food_id'];?>').style.visibility = "hidden";
+					document.getElementById('r<?php echo $row_finfo['food_id'];?>').style.visibility = "hidden";
 				}
 				</script>
 	<?php
-			    echo "<td><button class='bnum' type='button' onclick='m".$row_finfo['food_id']."()' ><b>-</b></button>";
-				echo "<input type='number' class='bnum' id=".$row_finfo['food_id']." name=".$row_finfo['food_id']." min = '0' max = '999'/>";
-				echo "<button class='bnum' type='button' onclick='a".$row_finfo['food_id']."()' ><b>+</b></button></td>";
+			    echo "<td onmousemove='vis{$row_finfo['food_id']}()' onmouseout='hide{$row_finfo['food_id']}();check{$row_finfo['food_id']}()'><button id='l{$row_finfo['food_id']}' class='bnum' type='button' onclick='m{$row_finfo['food_id']}()' ><b>-</b></button>";
+				echo "<input type='number' id='{$row_finfo['food_id']}' name=".$row_finfo['food_id']." min = '0' max = '999'/>";
+				echo "<button id='r{$row_finfo['food_id']}' class='bnum' type='button' onclick='a{$row_finfo['food_id']}()' ><b>+</b></button></td>";
 	            echo "</tr>";
             }
 		}
 	?>	
-			</table><br/><blocks cols='2'>
-			<div>
-				<button type='reset' outline>Reset</button>
-			</div>
-			<div class='text-right'>
-				<button id='creare_order' type='primary' name='create'>Create</button>
-			</div>
-		</form></blocks>
+			</table><br/>
+		</form>
 </div>
 <div id='create_page'>
-	<?php
-		include 'create_order_page.php';
-	?>
+	<?php include 'create_order_page.php';?>
 </div>
+
+
 
 
