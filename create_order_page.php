@@ -1,8 +1,9 @@
 		<?php
+		date_default_timezone_set('PRC'); 
             $sql_foodinfo = "select s.food_id,s.cata_name as food_name,s.price,p.cata_name from food_catalogue as s join food_catalogue as p where p.food_id = s.catalog_id and  s.food_id != s.catalog_id;";
             $result = $mysql->query($sql_foodinfo);
             $food_cata_info = array();
-            echo "<form action ='submit.php' method = 'post'>";
+            echo "<form id='order_submit' action ='submit.php' method = 'post'>";
             echo "<table class ='table-bordered'>"; 
             while($row = $mysql->fetch($result)) {
 	            $food_cata_info['name'][$row['food_id']] = $row['food_name'];
@@ -44,11 +45,8 @@
 	         	echo "<tr><td colspan='1' class='bold'>Phone Number</td><td colspan='3'>".$row[3]."</td></tr>";
 	         	echo "<tr><td colspan='1' class='bold'>Address</td><td colspan='3'>".$row[4]."</td></tr></table>";
 	          	?>
-				<blocks cols='3'>
-				<div>
-					<button type='button' outline name='back' onclick ="javascript: history.back(-1);">Modify</button>
-				</div>
 				<script language="javascript"> 
+					document.getElementById('createbtn').style.display= "none";
 					function printdiv(printpage) { 
 						var headstr = "<html><head><title></title></head><body>"; 
 						var footstr = "</body>"; 
@@ -59,19 +57,31 @@
 						document.body.innerHTML = oldstr; 
 						return false; 
 					} 
+					function reset() {  
+						if (confirm("Do you want to reset?")) {  
+							window.location.href='index.php?page=create_order';
+						}  
+					}
 				</script> <!--<link href='' rel='stylesheet' media='all' />
 					<link href='' rel='stylesheet' media='print'/>-->
-	          	<div class='text-centered'>
-					<button type='button' onclick="printdiv('create_page');">Print</button>
-				</div>
-	         	<div class='text-right'>
-					<button class='submit' type='primary' name='submit'>Submit</button>
-				</div>
-				</blocks></form>
+			<nav id='submitbtn'>
+			<ul>
+				<li><a onclick="printdiv('create_page');">Print</a></li>
+				<li><a onclick="document.getElementById('order_submit').submit();">Submit</a>
+					<ul>
+						<li><a onclick="document.getElementById('order_submit').submit();">Submit</a></li>
+						<li><a onclick ="history.back(-1);">Modify</a></li>
+						<li><a onclick ="reset();">Reset</a></li>
+					</ul>
+				</li>
+			</ul>
+			</nav>
+			</form>
 		    <?php
-				session_start();
 				$_SESSION['totalp'] = $totalp;
 		        $_SESSION['cres'] = $create_res;
 		        $_SESSION['cus_id']= $_POST['cus_id'];
             }
+			
         ?>
+		

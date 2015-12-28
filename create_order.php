@@ -1,5 +1,6 @@
 <?php
 	error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
+	session_start();
 	$sql_fcata = "select catalog_id,cata_name from food_catalogue where food_id = catalog_id;";
 	$result_fcata = $mysql->query($sql_fcata);
 	$sql_cusinfo = "SELECT customer_id,CONCAT(firstname,' ',lastname) FROM customer_info ORDER BY firstname, lastname;";
@@ -14,25 +15,8 @@
 						echo "<option value=$row[0]>$row[1] @$row[0]</option>";
 					}?>
 				</select>
+				<button id='createbtn' type='primary'>Create New</button>
 			</div>
-<script>
-	function reset(text) {  
-       if (confirm(text)) {  
-             alert("Reset OK");  
-			 document.getElementById("order_table").reset();
-         }  
-    }  	
-</script>
-			<nav>
-			<ul>
-				<li><a>CreateOpt</a>
-					<ul>
-						<li><a onclick='document.getElementById("order_table").submit()'>Create</a></li>
-						<li><a onclick='reset("Do you want to reset this order?")'>Reset</a></li>
-					</ul>
-				</li>
-			</ul>
-			</nav>
 			<div class='create_order'>
 				<table class ='table-stripped'>
 	<?php
@@ -92,7 +76,8 @@
 		</form>
 </div>
 <div id='create_page'>
-	<?php include 'create_order_page.php';?>
+	<?php 
+		include 'create_order_page.php';?>
 </div>
 
 
