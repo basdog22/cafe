@@ -1,38 +1,45 @@
 <html>
     <head>
-        <title>Laowai Cafe</title>
-        <link type="text/css" rel="stylesheet" href="css/style.css"/>
+        <title>Cafe system</title>
+
+		<link type="text/css" rel="stylesheet" href="css/style.css"/>
         <link type="text/css" rel="stylesheet" href="css/kube.css"/>
+
+		<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">       
+
+  	  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  	  	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
     </head>
     <body>
 	    <center class="tab_out">
             <table class="table-stripped">
 		        <tr><td class='text-centered' id='tab'>
 				<nav>
-					<ul>
-						<li><a>Food Info</a>
-							<ul>
-								<li><a onclick="window.location.href='index.php?page=food_cata'">Food catalogue</a></li>
-								<li><a onclick="window.location.href='index.php?page=food_detail'">Food Detail</a></li>
-							</ul>
-						</li>
-						<li><a>Order Info</a>
-							<ul>
-								<li><a onclick="window.location.href='index.php?page=order_info'">All Orders</a></li>
-								<li><a onclick="window.location.href='index.php?page=order_detail'">Orders Detail</a></li>
-							</ul>
-						</li>
-						<li><a onclick="window.location.href='index.php?page=food_sold'">Food Sold Info</a></li>
-						<li><a onclick="window.location.href='index.php?page=customer_info'">Customer Info</a></li>
-					</ul>
-					<ul>
-						<li><a>Create</a>
-							<ul>
-								<li><a onclick="window.location.href='index.php?page=new_customer'">New Customer</a></li>
-								<li><a onclick="window.location.href='index.php?page=create_order'">New Order</a></li>
-							</ul>
-						</li>
-					</ul>
+					<div class="left-menu">
+						<a href="index.php?page=create_order"><button type="primary">Create order</button></a>
+						<a href="index.php?page=order_info"><button>All orders</button></a>
+					</div>
+					<div class="right-menu">
+						<div class="nav dropdown">
+						    <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Menu
+						    <span class="caret"></span></button>
+						    <ul class="dropdown-menu">
+						      <li class="dropdown-header">Overviews</li>
+							  <li><a href="index.php?page=food_sold">Food sold</a></li>
+							  <li><a href="index.php?page=order_detail">Order detail</a></li>
+						      <li class="divider"></li>
+						      <li class="dropdown-header">Manage</li>
+						      <li><a href="index.php?page=customer_info">Customer info</a></li>
+							  <li><a href="index.php?page=new_customer">New customer</a></li>
+						      <li class="divider"></li>
+							  <li class="dropdown-header">Manage</li>							  
+							  <li><a href="index.php?page=food_detail">Food items</a></li>	
+							  <li><a href="index.php?page=food_cata">Food categories</a></li>
+						    </ul>
+						  </div>
+						
+					</div>
 				</nav>
 					</td>
                 </tr>
