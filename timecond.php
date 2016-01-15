@@ -1,24 +1,25 @@
 <form action="<?php $page?>" method='post'>
-<select name="timestamp" class="select-small">Time Stamp
-	<option value='all'>All</option>
+<select name="timestamp" class="select-small" id='timestamp'>
 	<option value='today'>Today</option>
-	<option value='in7day'>In 7 Day</option>
-	<option value='thismonth'>This Month</option>
-	<option value='thisweek'>This Week</option>
-	<option value='thishour'>This Hour</option>
+	<option value='all'>All</option>
+	<option value='this_7_day'>In 7 Day</option>
+	<option value='this_month'>This Month</option>
+	<option value='this_week'>This Week</option>
+	<option value='this_hour'>This Hour</option>
 </select>
 <button type='submit' value='OK'>OK</button>
 </form>
 <?php
 $all = '';
 $today ="where date =(current_date())";
-$in7day = "where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date";
-$thismonth = "where month(date) = month(now())";
-$thisweek = "where week(date,0) = week(now())";
-$thishour = "where hour(time) = hour(now()) and date =(current_date())";
+$this_7_day = "where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date";
+$this_month = "where month(date) = month(now())";
+$this_week = "where week(date,0) = week(now())";
+$this_hour = "where hour(time) = hour(now()) and date =(current_date())";
 if(isset($_POST['timestamp'])){
-	$condition = $$_POST['timestamp'];
-	echo "<mark>".$_POST['timestamp']."</mark>";
+	$timestamp=$_POST['timestamp'];
+	$condition = $$timestamp;
+echo "<script>document.getElementById('timestamp').value = '$timestamp'</script>";
 }else {
-	$condition='';
+	$condition=$today;
 }?>

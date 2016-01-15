@@ -84,13 +84,9 @@
 	height: 50px;
 	color: white;
 }
-#submitbtn{
-	/* margin-left: 140px;	*/
-}
-
 #submitbtn ul li {
 	float: left;
-	padding-right: 20px;
+	padding-right: 10px;
 }
 #create_page{
 	width: 43%;
@@ -110,34 +106,57 @@ input[type="number"]{-moz-appearance:textfield;}
 	font-family:Georgia,Times;
 	visibility: hidden;
 }
-#tree{
-	position: fixed;
-	height: 650px;
-	z-index: 2;
-	margin-left: 100px;
-	margin-top: -50px;
-	display:none;
+.order_block{
+	width: 33.33%;
+	padding-right: 15px;
+	height: 300px;
+	float:left;
 }
-#xmas{
-	position: fixed;
-	z-index: 2;
-	margin-left: 500px;
-	display:none;
+.ob_nav{
+	border: 3px solid #f8f8f8;
+	height: 280px;
+	/*
+	border: 3px solid #0ab159;
+	-webkit-box-shadow:0 0 1px #0a8754;  
+    -moz-box-shadow:0 0 1px #0a8754;  
+    box-shadow:0 0 1px #0a8754;  */
+
 }
-#bgd{
-	background: grey;
-	opacity: 0.4;
-	z-index: 1;
-	margin-left:-500px;
-	margin-top:-100px;
-	position: fixed;
-	width: 1000%;
-	height: 1000%;
-	display:none;
+#ob_tbl{
+	height: 274px;
 }
-#egg{
-	margin-top: 950px;
-	width: 80px;
+#ob_tbl th{
+	background: #f8f8f8;
+	font-size: 1.2em;
+	padding-top: 10px;
+	padding-bottom: 5px;	
+}
+#ob_tbl_th td{
+	display: inline;
+	font-size: 1em;
+	font-weight: bold;
+	text-align:center;
+	padding: 15px 0px 15px 0px;
+}
+#ob_tbl_tb td{
+	display: inline;
+	text-align:center;
+	padding: 15px 0px 15px 0px;
+}
+#ob_tbl_tb th{
+	padding-bottom: 10px;
+	position: relative;
+
+}
+
+#paybtn{
+	display: inline;
+	position: absolute;
+	padding-left: 20px;
+	margin-top: -4.4%;
+}
+#paybtn button{
+	padding: 0px 15px 0px 15px;
 }
 /*DROPDOWN MENU
 nav {
