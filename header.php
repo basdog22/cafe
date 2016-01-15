@@ -15,7 +15,7 @@
 				<nav>
 					<div class="left-menu">
 						<a href="index.php?page=create_order"><button type="primary">Create order</button></a>
-						<a href="index.php?page=order_detail"><button>Order detail</button></a>
+						<a href="index.php?page=current_orders"><button>Current orders</button></a>
 					</div>
 					<div class="right-menu">
 						<div class="nav dropdown">
@@ -25,6 +25,7 @@
 						      <li class="dropdown-header">Overviews</li>
 							  <li><a href="index.php?page=food_sold">Food sold</a></li>
 							  <li><a href="index.php?page=order_info">All orders</a></li>
+							  <li><a href="index.php?page=order_detail">Orders detail</a></li>
 						      <li class="divider"></li>
 						      <li class="dropdown-header">Manage</li>
 						      <li><a href="index.php?page=customer_info">Customer info</a></li>

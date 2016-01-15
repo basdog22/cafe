@@ -1,6 +1,6 @@
 		<?php
 			date_default_timezone_set('PRC'); 
-			$cus_id = preg_replace("/\s/","",(int)$_POST['cus_id']);
+			$cus_id = (int)$_POST['cus_id'];
             $sql_foodinfo = "select s.food_id,s.cata_name as food_name,s.price,p.cata_name from food_catalogue as s join food_catalogue as p where p.food_id = s.catalog_id and  s.food_id != s.catalog_id;";
             $result = $mysql->query($sql_foodinfo);
             $food_cata_info = array();
@@ -30,10 +30,11 @@
             echo "<tr class='fat'><td>Food Name</td><td>Price</td><td>Quantity</td></tr>"; 
 		    $totalid = $mysql->fetch($mysql->query('select count(*) from food_catalogue;'))[0];
 		    $create_res = array();
-		    $totalp = 0;	
+		    $food__quantity=$_POST['odfood'];
+			$totalp = 0;	
 		    $itemcount = 0;
 			for ($f_id=11;$f_id<$totalid;$f_id++) {
-				$f_quantity = (int)$_POST[$f_id];
+				$f_quantity = $food__quantity[$f_id];
 	            if(!empty($f_quantity)) {
 	                echo "<tr><td><b>".$food_cata_info['name'][$f_id]."</b></td>";
 				    echo "<td>&#165;".$food_cata_info['price'][$f_id]."</td>";

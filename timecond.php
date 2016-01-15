@@ -22,4 +22,5 @@ if(isset($_POST['timestamp'])){
 echo "<script>document.getElementById('timestamp').value = '$timestamp'</script>";
 }else {
 	$condition=$today;
+	$timestamp='today';
 }?>

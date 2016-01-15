@@ -24,6 +24,8 @@ if ($page == 'default') {
 	include ("new_customer.php");
 }else if ($page == 'create_order') {
 	include ("create_order.php");
+}else if ($page == 'current_orders') {
+	include ("current_orders.php");
 }
 include("footer.php");
 
