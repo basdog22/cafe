@@ -23,7 +23,7 @@
                     $mysql->query($sql_insertf);
                 }
                 echo "<div class='forms'><fieldset class='alert alert-success'><legend class='fat'>Create Order Successfully</legend>";  
-                header("refresh:1;url='index.php?page=order_info'");				
+                header("refresh:1;url='index.php?page=current_orders'");				
             }else if(isset($_POST['lname'])){
 				if(!empty(preg_replace("/\s/","",(string)$_POST['lname'])) and !empty(preg_replace("/\s/","",(int)$_POST['newid']))){
 					$sql_newcus= "INSERT customer_info (customer_id,firstname,lastname,tel,birthdate,address) VALUE ('".preg_replace("/\s/","",(string)$_POST['newid'])."','".$_POST['fname']."','".preg_replace("/\s/","",(string)$_POST['lname'])."','".$_POST['tel']."','".$_POST['year']."-".$_POST['month']."-".$_POST['day']."','".$_POST['addr']."');";

@@ -13,7 +13,7 @@ $sql = "select Order_id,o.customer_id,firstname as fname,lastname as lname,Date,
 			$row1=$mysql->fetch($res);
             echo "<td>".$row['Order_id']." </td>";
 			echo "<td>".$row['customer_id']." </td>";
-			echo "<td>".$row['fname']." ".$row['lname']." </td>";
+			echo "<td>".$row['fname']." ".$row['lname']."</td>";
 			echo "<td>&#165;".$row1['order_price']." </td>";
 			echo "<td>".$row['Date']." </td>";
 			echo "<td>".$row['Time']." </td>";
@@ -28,7 +28,7 @@ function firm(text,url) {
 </script>
 		<td>
 			<a href="" onclick="confirm('Do you want to Edit this?')"><samp>o</samp></a>
-			<a onclick="firm('Do you want to delete this order and its detail information?','sql.php?sql=delete from orders where order_id ='+<?php echo $row['Order_id'];?>);"><kbd>x</kbd></a>
+			<a onclick="firm('Do you want to delete this order and its detail information?','sql.php?sql=delete from orders where order_id = <?php echo $row['Order_id'];?>')"><kbd>x</kbd></a>
 		</td>
 	</tr>
 <?php } ?> 
