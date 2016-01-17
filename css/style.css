@@ -159,6 +159,9 @@ input[type="number"]{-moz-appearance:textfield;}
 #paybtn button{
 	padding: 0px 15px 0px 15px;
 }
+#paybtn form{
+display: inline;
+}
 #paid span{
 	color: #0ab159;	
 	visibility:hidden;

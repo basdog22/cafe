@@ -1,7 +1,6 @@
 <html>
     <head>
         <title>Cafe system</title>
-
 		<link type="text/css" rel="stylesheet" href="css/style.css"/>
         <link type="text/css" rel="stylesheet" href="css/kube.css"/>
 		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">       

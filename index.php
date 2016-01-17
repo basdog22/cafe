@@ -22,10 +22,10 @@ if ($page == 'default') {
 	include ("cus_info.php");
 }else if ($page == 'new_customer') {
 	include ("new_customer.php");
-}else if ($page == 'create_order') {
-	include ("create_order.php");
 }else if ($page == 'current_orders') {
 	include ("current_orders.php");
+}else if ($page == 'create_order') {
+	include ("create_order.php");
 }
 include("footer.php");
 
