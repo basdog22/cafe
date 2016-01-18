@@ -104,7 +104,6 @@ input[type="number"]{-moz-appearance:textfield;}
 	font-family:Georgia,Times;
 	visibility: hidden;
 }
-
 .order_block{
 	width: 33.33%;
 	padding-right: 15px;
@@ -114,10 +113,8 @@ input[type="number"]{-moz-appearance:textfield;}
 .ob_nav{
 	border: 3px solid #f8f8f8;
 	height: 280px;
-	border: 3px solid #f8f8f8;
 	/*border: 2px solid #0ab159;
 	box-shadow: 0px 0px 5px #0ab159; */ 
-  
 }
 #ob_tbl{
 	height: 274px;
@@ -135,18 +132,20 @@ input[type="number"]{-moz-appearance:textfield;}
 	padding: 15px 0px 15px 0px;
 }
 #ob_tbl_tb td{
-	display: inline;
+	text-align:center;
+	padding: 15px 0px 15px 0px;
+}
+#ob_tbl_tb1 td{
+	display: none;
 	text-align:center;
 	padding: 15px 0px 15px 0px;
 }
 #ob_tbl_tb th{
 	padding-bottom: 12px;
 }
-
 .morerow{
-	border-top: 4px groove skyblue;
+	border-top: 2px groove skyblue;
 	word-spacing:23px;
-	/*word-spacing:37px;*/
 	display: inline;
 	padding-left:0px;
 }

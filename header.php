@@ -38,6 +38,7 @@
 						
 					</div>
 				</nav>
+				
 				</tr></td>      
 		    </table>
 		</center>
@@ -65,3 +66,4 @@
 		<div class='body'>
             <row>
                 <column cols="12">		
+		

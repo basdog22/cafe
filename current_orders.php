@@ -17,6 +17,30 @@
 	function submit(orid){
 		document.getElementById('formd'+orid).submit();
 	}
+	function foldbtn(orid){
+		document.getElementById('ob'+orid).style.height='300px';
+		document.getElementById('obnav'+orid).style.height= '280px';
+		document.getElementById('more'+orid).style.display='inline';
+		document.getElementById('fold'+orid).style.display='none';
+		var x1 = document.getElementsByClassName('obtd'+orid);
+		var i1;
+		for (i1=0;i1<x1.length;i1++){
+			x1[i1].style.display= 'none';
+		}
+	}
+	function morebtn(orid,t){
+		document.getElementById('ob'+orid).style.height= ((40*(t-3))+300)+'px';
+		document.getElementById('obnav'+orid).style.height= ((40*(t-3))+280)+'px';
+		document.getElementById('more'+orid).style.display='none';
+		document.getElementById('fold'+orid).style.display='inline';
+		document.getElementById('fold'+orid).style.borderTop='none';
+		var x = document.getElementsByClassName('obtd'+orid);
+		var i;
+		for (i=0;i<x.length;i++){
+			x[i].style.display= 'inline';
+		}
+	
+	}
 </script>
 <?php
 	include 'timecond.php';
@@ -29,7 +53,7 @@
 			$cusname=$row['fname']."&nbsp".$row['lname'];
 		}
 ?>
-<div class='order_block'>
+<div class='order_block' id='ob<?php echo $row[0];?>'>
   <div class='ob_nav' id='obnav<?php echo $row[0];?>'>
 	<table class ='table-stripped' id='ob_tbl'>
 		<tr>
@@ -56,11 +80,17 @@
 			while($row_de = $mysql->fetch($result_de)) {
 				$showtimes++;
 				if ($showtimes<4){
-					echo "<tr id='ob_tbl_tb'>";
+					echo "<tr id='ob_tbl_tb' >";
 					echo "<td>".$row_de['Food_name']." </td>";
 					echo "<td>".$row_de['Quantity']." </td>";
 					echo "<td>&#165;".$row_de['Single_Price']." </td>";
 					echo "<td>&#165;".$row_de['Total_Price']." </td></tr>";
+				}else{
+					echo "<tr id='ob_tbl_tb1'>";
+					echo "<td  class='obtd$row[0]'>".$row_de['Food_name']." </td>";
+					echo "<td  class='obtd$row[0]'>".$row_de['Quantity']." </td>";
+					echo "<td  class='obtd$row[0]'>&#165;".$row_de['Single_Price']." </td>";
+					echo "<td  class='obtd$row[0]'>&#165;".$row_de['Total_Price']." </td></tr>";
 				}
 				echo "<input type='hidden' name='fd_quan[{$row_de['food_id']}]' value='{$row_de['Quantity']}'/>";
 			}
@@ -79,7 +109,8 @@
 			</span>
 			<?php
 				if($num > 3){	
-					echo "<div id='more$row[0]' class='morerow' onclick=\"confirm('loading')\">&nbsp&nbsp&nbsp;<a>More</a>&nbsp &nbsp &nbsp;</div>";
+					echo "<div id='more$row[0]' class='morerow' onclick='morebtn($row[0],$num)'>&nbsp&nbsp&nbsp;<a>More</a>&nbsp &nbsp &nbsp;</div>";
+					echo "<div id='fold$row[0]' class='morerow' style='display:none;' onclick='foldbtn($row[0])'>&nbsp&nbsp&nbsp;<a>Fold</a>&nbsp &nbsp &nbsp;</div>";
 				}
 				if($row['payed']==1){
 				echo "<script>paidstyle('$row[0]')</script>";

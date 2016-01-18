@@ -31,7 +31,8 @@
 	}
 </script>
 <?php
-	//error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
+	session_start();
+	error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
 	$sql_fcata = "select catalog_id,cata_name from food_catalogue where food_id = catalog_id";
 	$result_fcata = $mysql->query($sql_fcata);
 	$sql_cusinfo = "SELECT customer_id,CONCAT(firstname,' ',lastname) FROM customer_info ORDER BY firstname, lastname";
@@ -45,7 +46,6 @@
 					while($row = $mysql->fetch($result_cusinfo)) {
 						echo "<option value=$row[0]>$row[1] @$row[0]</option>";
 					}	
-					session_start();
 					?>
 				</select>
 				<button id='createbtn' type='primary'>Create New</button>
@@ -77,7 +77,6 @@
 </div>
 <div id='create_page'>
 	<?php 
-		include 'create_order_page.php';
 		if(isset($_POST['fd_quan'])){
 			$fd_quan=$_POST['fd_quan'];
 			$od_cus=$_POST['od_cus'];
@@ -90,7 +89,19 @@
 				$food_num=$fd_quan[$food_id];				
 				echo "<script>document.getElementById($food_id).value=$food_num</script>";
 			}
+			unset($_POST['fd_quan']);
+			$_SESSION['times']=0;
+		}else{
+			if(isset($_SESSION['times'])){
+				$_SESSION['times']++;
+			}
 		}
+		if(isset($_SESSION['times'])){
+			if($_SESSION['times']>1){
+				unset($_SESSION['order_id']);
+			}	
+		}			
+		include 'create_order_page.php';
 				
 	?>
 </div>

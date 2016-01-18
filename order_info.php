@@ -27,7 +27,7 @@ function firm(text,url) {
     }  
 </script>
 		<td>
-			<a href="" onclick="confirm('Do you want to Edit this?')"><samp>o</samp></a>
+			<!--<a href="" onclick="confirm('Do you want to Edit this?')"><samp>o</samp></a>-->
 			<a onclick="firm('Do you want to delete this order and its detail information?','sql.php?sql=delete from orders where order_id = <?php echo $row['Order_id'];?>')"><kbd>x</kbd></a>
 		</td>
 	</tr>

@@ -7,7 +7,7 @@ if (isset($_GET['page'])) {
 }
 include("header.php");
 if ($page == 'default') {
-	include ("order_detail.php");
+	include ("current_orders.php");
 } else if ($page == 'food_cata') {
 	include ("food_cata.php");
 } else if ($page == 'food_detail') {
