@@ -35,8 +35,10 @@
 		}
 	}
 	
-	function moreorders(){
-		
+	function payOrder(orid){
+		if(confirm('Do you want to Pay order No.'+orid+'?')){
+			document.getElementsByName('paid'+orid)[0].click();
+		}
 	}
 </script>
 <?php
@@ -103,8 +105,9 @@
 		<nav id='paybtn'>
 			<span id="btn2<?php echo $row[0];?>">
 			<form method='get' action=''>
-			<button type="primary" name='paid<?php echo $row[0];?>' onclick="">Pay</button>
+			<button type="primary" name='paid<?php echo $row[0];?>' style='display:none;'/>
 			</form>
+			<button type="primary"  onclick="payOrder('<?php echo $row[0];?>')">Pay</button>
 			<button type='submit' name='edit' onclick="submit('<?php echo $row[0];?>')">Edit</button>
 			</span>
 			<?php
