@@ -1,3 +1,10 @@
+<script>
+function deleteOrder(orid){
+	if(confirm('Do you want to delete '+orid+' order ?')){
+		document.getElementById(orid).click();
+	}
+}
+</script>
 <?php
 $page='index.php?page=order_info';
 include "timecond.php";
@@ -19,7 +26,7 @@ $sql = "select Order_id,o.customer_id,firstname as fname,lastname as lname,Date,
 			echo "<td>".$row['Time']." </td>";
 ?>
 		<td>
-			<a onclick="document.getElementById('<?php echo $row['Order_id'];?>').click();"><kbd>x</kbd></a>
+			<a onclick="deleteOrder('<?php echo $row['Order_id'];?>')"><kbd>x</kbd></a>
 			<input id='<?php echo $row['Order_id'];?>' type='submit' name='nam' value='<?php echo $row['Order_id'];?>' style='display:none;'/>
 		</td>
 	</tr>
