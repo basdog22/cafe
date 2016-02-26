@@ -8,12 +8,6 @@
 			document.getElementById('more'+orid).style.wordSpacing='37px'; 
 		}
 	}
-	function paid(orid){
-		if(confirm('Paid?')){	
-			window.open("sql.php?sql=UPDATE orders SET payed=1 WHERE order_id="+orid);
-			paidstyle(orid);
-		}
-	}
 	function submit(orid){
 		document.getElementById('formd'+orid).submit();
 	}
@@ -39,12 +33,16 @@
 		for (i=0;i<x.length;i++){
 			x[i].style.display= 'inline';
 		}
+	}
 	
+	function moreorders(){
+		
 	}
 </script>
 <?php
 	include 'timecond.php';
-	$sql = "select Order_id,o.customer_id,firstname as fname,lastname as lname,Date,Time,payed from orders as o LEFT JOIN customer_info as c ON o.customer_ID = c.customer_id $condition ORDER BY order_id DESC";
+	if(!isset($rowNum)){$rowNum='';}
+	$sql = "select Order_id,o.customer_id,firstname as fname,lastname as lname,Date,Time,payed from orders as o LEFT JOIN customer_info as c ON o.customer_ID = c.customer_id $condition ORDER BY order_id DESC $rowNum";
 	$result = $mysql->query($sql);
 	while($row = $mysql->fetch($result)) {
 		if(empty($row['lname'])&&empty($row['fname'])){
@@ -104,10 +102,17 @@
 	</table>
 		<nav id='paybtn'>
 			<span id="btn2<?php echo $row[0];?>">
-			<button type="primary" onclick="paid('<?php echo $row[0];?>')">Pay</button>
+			<form method='get' action=''>
+			<button type="primary" name='paid<?php echo $row[0];?>' onclick="">Pay</button>
+			</form>
 			<button type='submit' name='edit' onclick="submit('<?php echo $row[0];?>')">Edit</button>
 			</span>
 			<?php
+				if(isset($_GET["paid$row[0]"])){
+					$sql = "UPDATE orders SET payed=1 WHERE order_id= $row[0]";
+					$mysql->query($sql);
+					echo "<script>paidstyle($row[0]);</script>";
+				}
 				if($num > 3){	
 					echo "<div id='more$row[0]' class='morerow' onclick='morebtn($row[0],$num)'>&nbsp&nbsp&nbsp;<a>More</a>&nbsp &nbsp &nbsp;</div>";
 					echo "<div id='fold$row[0]' class='morerow' style='display:none;' onclick='foldbtn($row[0])'>&nbsp&nbsp&nbsp;<a>Fold</a>&nbsp &nbsp &nbsp;</div>";

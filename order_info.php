@@ -5,7 +5,7 @@ $sql = "select Order_id,o.customer_id,firstname as fname,lastname as lname,Date,
 	    $result = $mysql->query($sql);
         echo "<table class ='table-stripped'>"; 
         echo "<th colspan='7'>All Orders:</th>";
-        echo "<tr><td class='bold'>Order ID</td><td class='bold'>Customer ID</td><td class='bold'>Customer</td><td class='bold'>Order Price</td><td class='bold'>Date</td><td class='bold'>Time</td><td></td></tr>";
+        echo "<tr><td class='bold'>Order ID</td><td class='bold'>Customer ID</td><td class='bold'>Customer</td><td class='bold'>Order Price</td><td class='bold'>Date</td><td class='bold'>Time</td><td></td></tr><form method='post' action=''>";
 		while($row = $mysql->fetch($result)) {
 			echo "<tr>";
 			$sql1 = "select sum(f.price * quantity) as order_price from order_food inner join food_catalogue as f ON order_food.food_id = f.food_id where order_id = {$row['Order_id']}";
@@ -18,18 +18,17 @@ $sql = "select Order_id,o.customer_id,firstname as fname,lastname as lname,Date,
 			echo "<td>".$row['Date']." </td>";
 			echo "<td>".$row['Time']." </td>";
 ?>
-<script>
-function firm(text,url) {  
-       if (confirm(text)) {
-			alert('Delete OK');		   
-			window.open(url);
-         }  
-    }  
-</script>
 		<td>
-			<!--<a href="" onclick="confirm('Do you want to Edit this?')"><samp>o</samp></a>-->
-			<a onclick="firm('Do you want to delete this order and its detail information?','sql.php?sql=delete from orders where order_id = <?php echo $row['Order_id'];?>')"><kbd>x</kbd></a>
+			<a onclick="document.getElementById('<?php echo $row['Order_id'];?>').click();"><kbd>x</kbd></a>
+			<input id='<?php echo $row['Order_id'];?>' type='submit' name='nam' value='<?php echo $row['Order_id'];?>' style='display:none;'/>
 		</td>
 	</tr>
-<?php } ?> 
+<?php 
+		}
+		echo '</form>';
+		if(isset($_POST['nam'])){
+			$delId = $_POST['nam'];
+			$mysql->query("DELETE FROM orders WHERE order_id = $delId");
+		}
+?> 
 </table>
