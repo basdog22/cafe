@@ -10,7 +10,7 @@
         <column cols="6">
         <?php
 			session_start();
-			include "db.php";
+			include "require/db.php";
             if(isset($_SESSION['food__quantity'])){
 				if(isset($_SESSION['order_id'])){
 					$sql_del="DELETE FROM orders WHERE order_id={$_SESSION['order_id']}";
@@ -23,7 +23,7 @@
 				unset($_SESSION['food__quantity']);
 				session_destroy();
                 $itemnum = count($food__quantity);
-                $sql_inserto = "INSERT orders(customer_id,date,time) VALUE($cus_id,curdate(),curtime())";
+                $sql_inserto = "INSERT orders(cus_id,date,time) VALUE($cus_id,curdate(),curtime())";
                 $mysql->query($sql_inserto);
 				$order_id = mysql_insert_id();
                 for ($itemcount=0;$itemcount<$itemnum;$itemcount++) {
@@ -35,11 +35,11 @@
                 echo "<div class='forms'><fieldset class='alert alert-success'><legend class='fat'>Create Order Successfully</legend>";  
                 header("refresh:1;url='index.php?page=current_orders'");				
             }else if(isset($_POST['lname'])){
-				if(!empty(preg_replace("/\s/","",(string)$_POST['lname'])) and !empty(preg_replace("/\s/","",(int)$_POST['newid']))){
-					$sql_newcus= "INSERT customer_info (customer_id,firstname,lastname,tel,birthdate,address) VALUE ('".preg_replace("/\s/","",(string)$_POST['newid'])."','".$_POST['fname']."','".preg_replace("/\s/","",(string)$_POST['lname'])."','".$_POST['tel']."','".$_POST['year']."-".$_POST['month']."-".$_POST['day']."','".$_POST['addr']."');";
+				if(!empty(preg_replace("/\s/","",(string)$_POST['lname']))){
+				$sql_newcus= "INSERT customer_info (firstname,lastname,tel) VALUE ('{$_POST['fname']}','".preg_replace("/\s/","",(string)$_POST['lname'])."','{$_POST['tel']}')";
 					$mysql->query($sql_newcus);
 					echo "<div class='forms'><fieldset class='alert alert-success'><legend class='fat'>Add Customer Successfully</legend>";
-					header("refresh:1;url='index.php?page=customer_info'");
+					header("refresh:1;url='index.php?page=customer&action=info'");
 				}else{
 					echo "<script> history.back(-1)</script>";
 				}

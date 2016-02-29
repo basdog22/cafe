@@ -40,11 +40,16 @@
 			document.getElementsByName('paid'+orid)[0].click();
 		}
 	}
+	function deleteOrder(orid){
+	if(confirm('Do you want to delete '+orid+' order ?')){
+		document.getElementById('del'+orid).click();
+	}
+}
 </script>
 <?php
 	include 'timecond.php';
 	if(!isset($rowNum)){$rowNum='';}
-	$sql = "select Order_id,o.customer_id,firstname as fname,lastname as lname,Date,Time,payed from orders as o LEFT JOIN customer_info as c ON o.customer_ID = c.customer_id $condition ORDER BY order_id DESC $rowNum";
+	$sql = "select Order_id,o.cus_id,firstname as fname,lastname as lname,Date,Time,payed from orders as o LEFT JOIN customer_info as c ON o.cus_id = c.cus_id $condition ORDER BY order_id DESC $rowNum";
 	$result = $mysql->query($sql);
 	while($row = $mysql->fetch($result)) {
 		if(empty($row['lname'])&&empty($row['fname'])){
@@ -63,7 +68,7 @@
 			$row1=$mysql->fetch($res);
 			$num=$row1['num'];
 			echo "<th colspan='2'>$cusname</th>";
-			echo "<th class='text-right' colspan='2'>".$row['Date']."&nbsp".$row['Time']."</th>";
+			echo "<th class='text-right' colspan='2'>".substr($row['Date'],5)."&nbsp".substr($row['Time'],0,5)."</th>";
 			?>
 		</tr>
 		<tr id='ob_tbl_th'>
@@ -73,9 +78,9 @@
 			<td>Total Price</td>
 		</tr>
 		<?php
-	$sql_de = "SELECT Item_id,F.order_id,cus.lastname as lname,Cs.cata_name as Food_name,Cp.Cata_name,Quantity,Cs.price as Single_Price,(Cs.price*quantity)as Total_Price,F.food_id from order_food as F JOIN orders as O on F.order_id = O.order_id JOIN food_catalogue as Cs ON F.food_id = Cs.food_id JOIN food_catalogue as Cp ON Cp.food_id = Cs.catalog_id LEFT JOIN customer_info as cus ON cus.customer_id = O.customer_id WHERE F.order_id= {$row['Order_id']}";
+	$sql_de = "SELECT Item_id,F.order_id,cus.lastname as lname,Cs.cata_name as Food_name,Cp.Cata_name,Quantity,Cs.price as Single_Price,(Cs.price*quantity)as Total_Price,F.food_id from order_food as F JOIN orders as O on F.order_id = O.order_id JOIN food_catalogue as Cs ON F.food_id = Cs.food_id JOIN food_catalogue as Cp ON Cp.food_id = Cs.catalog_id LEFT JOIN customer_info as cus ON cus.cus_id = O.cus_id WHERE F.order_id= {$row['Order_id']}";
 			$result_de = $mysql->query($sql_de);
-			echo "<form id='formd{$row['Order_id']}' method='post' action='index.php?page=create_order'>";
+			echo "<form id='formd{$row['Order_id']}' method='post' action='require/index.php?page=create_order'>";
 			$showtimes=0;
 			while($row_de = $mysql->fetch($result_de)) {
 				$showtimes++;
@@ -94,7 +99,7 @@
 				}
 				echo "<input type='hidden' name='fd_quan[{$row_de['food_id']}]' value='{$row_de['Quantity']}'/>";
 			}
-			echo "<input type='hidden' name='od_cus[{$row['Order_id']}]' value='{$row['customer_id']}'/>";
+			echo "<input type='hidden' name='od_cus[{$row['Order_id']}]' value='{$row['cus_id']}'/>";
 			echo "</form>";
 			for($n=$num;$n<3;$n++){
 				echo "<tr id='ob_tbl_tb'><td>&nbsp</td><td>&nbsp</td><td>&nbsp</td><td>&nbsp</td></tr>";
@@ -109,7 +114,11 @@
 			</form>
 			<button type="primary"  onclick="payOrder('<?php echo $row[0];?>')">Pay</button>
 			<button type='submit' name='edit' onclick="submit('<?php echo $row[0];?>')">Edit</button>
+			<form method='post' action=''>
+			<kbd onclick="deleteOrder('<?php echo $row['Order_id'];?>')">x</kbd>
+			<input id='del<?php echo $row['Order_id'];?>' type='submit' name='nam' value='<?php echo $row['Order_id'];?>' style='display:none;'/>
 			</span>
+			</form>
 			<?php
 				if(isset($_GET["paid$row[0]"])){
 					$sql = "UPDATE orders SET payed=1 WHERE order_id= $row[0]";
@@ -128,7 +137,12 @@
   </div>
 </div>
 <?php
-	}	
+	}
+	if(isset($_POST['nam'])){
+			$delId = $_POST['nam'];
+			echo "<script>document.getElementById('obnav'+$delId).style.display='none';</script>";
+			$mysql->query("DELETE FROM orders WHERE order_id = $delId");
+		}
 	if(empty($row1)){
 		echo "No orders for $timestamp yet";
 	}

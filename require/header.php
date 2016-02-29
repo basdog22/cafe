@@ -1,11 +1,11 @@
 <html>
     <head>
         <title>Cafe system</title>
-		<link type="text/css" rel="stylesheet" href="css/style.css"/>
-        <link type="text/css" rel="stylesheet" href="css/kube.css"/>
-		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">       
-  	  	<script src="js/jquery.min.js"></script>
-  	  	<script src="js/bootstrap.min.js"></script>
+		<link type="text/css" rel="stylesheet" href="static/css/style.css"/>
+        <link type="text/css" rel="stylesheet" href="static/css/kube.css"/>
+		<link type="text/css" rel="stylesheet" href="static/css/bootstrap.min.css">
+  	  	<script src="static/js/jquery.min.js"></script>
+  	  	<script src="static/js/bootstrap.min.js"></script>
     </head>
     <body>
 	    <center class="tab_out">
@@ -22,20 +22,17 @@
 						    <span class="caret"></span></button>
 						    <ul class="dropdown-menu">
 						      <li class="dropdown-header">Overviews</li>
-							  <li><a href="index.php?page=food_sold">Food sold</a></li>
-							  <li><a href="index.php?page=order_info">All orders</a></li>
-							  <li><a href="index.php?page=order_detail">Orders detail</a></li>
+							  <li><a href="index.php?page=food&action=sold">Food sold</a></li>
 						      <li class="divider"></li>
 						      <li class="dropdown-header">Manage</li>
-						      <li><a href="index.php?page=customer_info">Customer info</a></li>
-							  <li><a href="index.php?page=new_customer">New customer</a></li>
+						      <li><a href="index.php?page=customer&action=info">Customer info</a></li>
+							  <li><a href="index.php?page=customer&action=new">New customer</a></li>
 						      <li class="divider"></li>
-							  <li class="dropdown-header">Manage</li>							  
-							  <li><a href="index.php?page=food_detail">Food items</a></li>	
-							  <li><a href="index.php?page=food_cata">Food categories</a></li>
+							  <li class="dropdown-header">Product</li>							  
+							  <li><a href="index.php?page=food&action=detail">Food items</a></li>
+							  <li><a href="index.php?page=food&action=cata">Food categories</a></li>
 						    </ul>
 						  </div>
-						
 					</div>
 				</nav>
 				
@@ -44,9 +41,9 @@
 		</center>
 		<div class='left'>
 			<div class='left_tab'>
-				<a href=#><img src='img/up.png'/></a><br/>
+				<a href=#><img src='static/img/up.png'/></a><br/>
 				<?php
-				 if ($page == 'create_order'|| $page == 'food_sold') {
+				 if ($page == 'create_order') {
 					echo "<a href=#Sandwiches>Sandwiches</a><br/>";
 					echo "<a href=#Salads>Salads</a><br/>";
 					echo "<a href=#Eggs>Eggs</a> <br/>";
@@ -60,7 +57,7 @@
 					echo "<a href=#Special>Special</a><br/>";
 				}
 				?>
-				<a href=#bottom><img src='img/down.png'/></a>
+				<a href=#bottom><img src='static/img/down.png'/></a>
 			</div>
 		</div>
 		<div class='body'>
