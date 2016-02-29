@@ -1,7 +1,6 @@
 <html>
     <head>
         <title>Cafe system</title>
-
 		<link type="text/css" rel="stylesheet" href="css/style.css"/>
         <link type="text/css" rel="stylesheet" href="css/kube.css"/>
 		<link type="text/css" rel="stylesheet" href="css/bootstrap.min.css">       
@@ -15,7 +14,7 @@
 				<nav>
 					<div class="left-menu">
 						<a href="index.php?page=create_order"><button type="primary">Create order</button></a>
-						<a href="index.php?page=order_info"><button>All orders</button></a>
+						<a href="index.php?page=current_orders"><button>Current orders</button></a>
 					</div>
 					<div class="right-menu">
 						<div class="nav dropdown">
@@ -24,7 +23,8 @@
 						    <ul class="dropdown-menu">
 						      <li class="dropdown-header">Overviews</li>
 							  <li><a href="index.php?page=food_sold">Food sold</a></li>
-							  <li><a href="index.php?page=order_detail">Order detail</a></li>
+							  <li><a href="index.php?page=order_info">All orders</a></li>
+							  <li><a href="index.php?page=order_detail">Orders detail</a></li>
 						      <li class="divider"></li>
 						      <li class="dropdown-header">Manage</li>
 						      <li><a href="index.php?page=customer_info">Customer info</a></li>
@@ -38,13 +38,13 @@
 						
 					</div>
 				</nav>
-					</td>
-                </tr>
+				
+				</tr></td>      
 		    </table>
 		</center>
 		<div class='left'>
 			<div class='left_tab'>
-				<a href=#tab_out><img src='img/up.png'/></a><br/>
+				<a href=#><img src='img/up.png'/></a><br/>
 				<?php
 				 if ($page == 'create_order'|| $page == 'food_sold') {
 					echo "<a href=#Sandwiches>Sandwiches</a><br/>";
@@ -66,3 +66,4 @@
 		<div class='body'>
             <row>
                 <column cols="12">		
+		

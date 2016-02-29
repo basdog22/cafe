@@ -49,7 +49,6 @@
 .left_tab{
 	position: fixed;
 	background: rgba(0,0,0,0.05);
-	
 	margin-top: 8%;
 	margin-left: 1%;
 	text-align: center;
@@ -62,10 +61,9 @@
 .left_tab img{
 	width: 80px;
 	height: 40px;
-	border-radius: 25px;
 }
 .left_tab img:hover{
-	background: #e21325;
+	background: #f8f8f8;
 	opacity: 0.75;
 	-moz-transition: all linear 0.2s;
 	transition: all linear 0.2s;
@@ -84,13 +82,9 @@
 	height: 50px;
 	color: white;
 }
-#submitbtn{
-	/* margin-left: 140px;	*/
-}
-
 #submitbtn ul li {
 	float: left;
-	padding-right: 20px;
+	padding-right: 10px;
 }
 #create_page{
 	width: 43%;
@@ -110,35 +104,68 @@ input[type="number"]{-moz-appearance:textfield;}
 	font-family:Georgia,Times;
 	visibility: hidden;
 }
-#tree{
-	position: fixed;
-	height: 650px;
-	z-index: 2;
-	margin-left: 100px;
-	margin-top: -50px;
-	display:none;
+.order_block{
+	width: 33.33%;
+	padding-right: 15px;
+	height: 300px;
+	float:left;  
 }
-#xmas{
-	position: fixed;
-	z-index: 2;
-	margin-left: 500px;
-	display:none;
+.ob_nav{
+	border: 3px solid #f8f8f8;
+	height: 280px;
+	/*border: 2px solid #0ab159;
+	box-shadow: 0px 0px 5px #0ab159; */ 
 }
-#bgd{
-	background: grey;
-	opacity: 0.4;
-	z-index: 1;
-	margin-left:-500px;
-	margin-top:-100px;
-	position: fixed;
-	width: 1000%;
-	height: 1000%;
-	display:none;
+#ob_tbl{
+	height: 274px;
 }
-#egg{
-	margin-top: 950px;
-	width: 80px;
+#ob_tbl th{
+	background: #f8f8f8;
+	font-size: 1.2em;
+	padding-top: 10px;
+	padding-bottom: 5px;	
 }
+#ob_tbl_th td{
+	display: inline;
+	font-weight: bold;
+	text-align:center;
+	padding: 15px 0px 15px 0px;
+}
+#ob_tbl_tb td{
+	text-align:center;
+	padding: 15px 0px 15px 0px;
+}
+#ob_tbl_tb1 td{
+	display: none;
+	text-align:center;
+	padding: 15px 0px 15px 0px;
+}
+#ob_tbl_tb th{
+	padding-bottom: 12px;
+}
+.morerow{
+	border-top: 2px groove skyblue;
+	word-spacing:23px;
+	display: inline;
+	padding-left:0px;
+}
+#paybtn{
+	display: inline;
+	position: absolute;
+	padding-left: 10px;
+	margin-top: -4.4%;
+}
+#paybtn button{
+	padding: 0px 15px 0px 15px;
+}
+#paybtn form{
+display: inline;
+}
+#paid span{
+	color: #0ab159;	
+	visibility:hidden;
+}
+
 /*DROPDOWN MENU
 nav {
     margin: -50px 400px;

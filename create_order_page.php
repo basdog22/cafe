@@ -1,52 +1,69 @@
+<script>
+			function printTime(){
+				var d = new Date();
+				var year = d.getFullYear();
+				var day = d.getDate();
+				var month = d.getMonth()+1;
+				var hours = d.getHours();
+				var mins = d.getMinutes();
+				var secs = d.getSeconds();
+				document.getElementById('time').innerHTML=day+"/"+month+"/"+year+"&nbsp;"+hours+":"+mins+":"+secs;
+			}
+			setInterval(printTime,1000);
+		</script>
 		<?php
-		date_default_timezone_set('PRC'); 
+			date_default_timezone_set('PRC'); 
             $sql_foodinfo = "select s.food_id,s.cata_name as food_name,s.price,p.cata_name from food_catalogue as s join food_catalogue as p where p.food_id = s.catalog_id and  s.food_id != s.catalog_id;";
             $result = $mysql->query($sql_foodinfo);
             $food_cata_info = array();
             echo "<form id='order_submit' action ='submit.php' method = 'post'>";
-            echo "<table class ='table-bordered'>"; 
+            echo "<table class ='table-bordered'>";  
             while($row = $mysql->fetch($result)) {
 	            $food_cata_info['name'][$row['food_id']] = $row['food_name'];
 	            $food_cata_info['price'][$row['food_id']] = $row['price'];
 	            $food_cata_info['cata'][$row['food_id']] = $row['cata_name'];
             }
-			$datetime = date('m-d-y h:i:s',time());
-            echo "<th colspan='4'><span style='font-size: 26px;'>New Order</span> $datetime</th>";
-            echo "<tr class='bold'><td>Food Type</td><td>Food Name</td><td>Price</td><td>Quantity</td></tr>"; 
-		    $totalid = $mysql->fetch($mysql->query('select count(*) from food_catalogue;'))[0];
-		    $create_res = array();
-		    $totalp = 0;	
-		    $itemcount = 0;
-		    for ($f_id=11;$f_id<$totalid;$f_id++) {
-				$f_quantity = (int)$_POST[$f_id];
-	            if(!empty($f_quantity)) {
-				    echo "<tr><td>".$food_cata_info['cata'][$f_id]."</td>";
-	                echo "<td>".$food_cata_info['name'][$f_id]."</td>";
-				    echo "<td>&#165;".$food_cata_info['price'][$f_id]."</td>";
-                    echo "<td>".$f_quantity."</td></tr>";
-				    $create_res['food_id'][$itemcount] =$f_id;
-                    $create_res['quantity'][$itemcount]= $f_quantity;				
-                    $totalp += $food_cata_info['price'][$f_id] * $f_quantity;
-				    $itemcount++;
-	            }
-            }
-		    if ($totalp > 0) {
-	            if(!empty(preg_replace("/\s/","",(int)$_POST['cus_id']))){
-					$sql_cusinfo = "SELECT customer_id,firstname,lastname,tel,address from customer_info where customer_id = '".preg_replace("/\s/","",(string)$_POST['cus_id'])."';";
-					$result = $mysql->query($sql_cusinfo);  
-					$row = $mysql->fetch($result);
-					if(empty($row[0])){
-						$row[0]= preg_replace("/\s/","",(string)$_POST['cus_id']);
-					}
+			$datetime = date('d/m/y h:i:s',time());
+			if(isset($_POST['cus_id'])){
+				if(!empty($_POST['cus_id'])){
+					$cus_id = (int)$_POST['cus_id'];
+					$sql_cusinfo = "SELECT firstname,lastname,tel,address from customer_info where customer_id = $cus_id;";
+					$result_cus = $mysql->query($sql_cusinfo);  
+					$row_cus = $mysql->fetch($result_cus);
+					$cusname=$row_cus[0]."&nbsp".$row_cus[1];
+				}else{
+					$cus_id = '0';
+					$cusname='Unknown';
 				}
-		        echo "<tr><td colspan='2' class='bold'>Total Price</td><td colspan='2' class='text-centered'>&#165;  ".$totalp."</td></tr>";
-		        //echo "<tr><td colspan='1' class='bold'>Customer ID</td><td colspan='3'>".$row[0]."</td></tr>";
-	          	echo "<tr><td colspan='1' class='bold'>Customer Name</td><td colspan='3'>".$row[1]." ".$row[2]."</td></tr>";
-	         	echo "<tr><td colspan='1' class='bold'>Phone Number</td><td colspan='3'>".$row[3]."</td></tr>";
-	         	echo "<tr><td colspan='1' class='bold'>Address</td><td colspan='3'>".$row[4]."</td></tr></table>";
-	          	?>
-				<script language="javascript"> 
-					document.getElementById('createbtn').style.display= "none";
+			}else{
+				$cusname='New Order';
+			}
+			echo "<tr class='bold'>
+			<td style='font-size: 26px;border-right:0px;' >".$cusname."&nbsp</td>
+			<td colspan='2' style='border-left:0;text-align:right;' id='time'>$datetime</td></tr>";
+            echo "<tr class='fat'><td>Food Name</td><td>Price</td><td>Quantity</td></tr>"; 
+		    $create_res = array();
+			$totalp = 0;
+			if(isset($_POST['odfood'])){
+				$food__quantity=array_filter($_POST['odfood']);
+				if(!empty($food__quantity)){
+					for ($i=0;$i < count($food__quantity);$i++) {
+						$f_id = array_keys($food__quantity)[$i];
+						$f_quantity = $food__quantity[$f_id];
+						if(!empty($f_quantity)) {
+							echo "<tr><td><b>".$food_cata_info['name'][$f_id]."</b></td>";
+							echo "<td>&#165;".$food_cata_info['price'][$f_id]."</td>";
+							echo "<td>".$f_quantity."</td></tr>";
+							$totalp += $food_cata_info['price'][$f_id] * $f_quantity;
+						}
+					}	
+					$_SESSION['food__quantity'] = $food__quantity;
+					$_SESSION['cus_id']= $cus_id;
+				}
+				echo "<tr><td colspan='2' class='fat'>Total Price</td><td colspan='2' class='text-centered'>&#165;  ".$totalp."</td></tr></table></form>";
+				echo "<script>document.getElementById('createbtn').style.display= 'none'</script>";
+		?>
+				<script> 
 					function printdiv(printpage) { 
 						var headstr = "<html><head><title></title></head><body>"; 
 						var footstr = "</body>"; 
@@ -62,23 +79,24 @@
 							window.location.href='index.php?page=create_order';
 						}  
 					}
-				</script> <!--<link href='' rel='stylesheet' media='all' />
-					<link href='' rel='stylesheet' media='print'/>-->
-					
-			<nav id='submitbtn'>
-				<ul>
-					<li><a onclick="document.getElementById('order_submit').submit();"><button type="primary">Submit</button></a>
-					<li><a onclick="printdiv('create_page');"><button>Print</button></a></li>
-					<li><a onclick ="history.back(-1);"><button outline>Modify</button></a></li>
-					<li><a onclick ="reset();"><button outline>Reset</button></a></li>
-				</ul>
-			</nav>
-			</form>
-		    <?php
-				$_SESSION['totalp'] = $totalp;
-		        $_SESSION['cres'] = $create_res;
-		        $_SESSION['cus_id']= $_POST['cus_id'];
-            }
-			
+				</script>
+				<nav id='submitbtn'>
+					<ul>
+						<li><button id='subord' type="primary" onclick="document.getElementById('order_submit').submit()">Submit</button></li>
+						<li><button onclick="printdiv('create_page')">Print</button></li>
+						<li><button id='modord' onclick ="history.go(-1)" outline>Modify</button></li>
+						<li><button onclick ="reset()" outline>Reset</button></li>
+					</ul>
+				</nav>
+		<?php
+				if(!($totalp>0)){
+					echo "<script>document.getElementById('subord').disabled='true';</script>";
+				}
+				if(isset($_SESSION['order_id'])){
+					echo "<script>document.getElementById('modord').disabled='true';</script>";
+				}
+            }else{
+				echo"</table></form>";
+			}
         ?>
 		
