@@ -165,7 +165,9 @@ display: inline;
 	color: #0ab159;	
 	visibility:hidden;
 }
+#report td{
 
+}
 /*DROPDOWN MENU
 nav {
     margin: -50px 400px;

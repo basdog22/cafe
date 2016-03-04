@@ -23,6 +23,7 @@
 						    <ul class="dropdown-menu">
 						      <li class="dropdown-header">Overviews</li>
 							  <li><a href="index.php?page=food&action=sold">Food sold</a></li>
+							  <li><a href="index.php?page=food&action=weekly">Weekly Report</a></li>
 						      <li class="divider"></li>
 						      <li class="dropdown-header">Manage</li>
 						      <li><a href="index.php?page=customer&action=info">Customer info</a></li>
@@ -43,7 +44,10 @@
 			<div class='left_tab'>
 				<a href=#><img src='static/img/up.png'/></a><br/>
 				<?php
-				 if ($page == 'create_order') {
+				if(!isset($_GET['action'])){
+					$_GET['action']='';
+				}
+				 if ($page == 'create_order' || ($_GET['action']=='weekly') || $_GET['action']=='sold') {
 					echo "<a href=#Sandwiches>Sandwiches</a><br/>";
 					echo "<a href=#Salads>Salads</a><br/>";
 					echo "<a href=#Eggs>Eggs</a> <br/>";

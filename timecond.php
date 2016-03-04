@@ -1,6 +1,6 @@
 <script>
 var ifweek = function (){
-	var weekNumInput = document.getElementById('weeknum');
+	var weekNumInput = document.getElementById('inputtime');
 	var timestamp = document.getElementById('timestamp');
 	if(timestamp.value =='input_week'){
 		weekNumInput.style.display='inline';
@@ -11,7 +11,7 @@ var ifweek = function (){
 	}
 };
 </script>
-<form action="<?php $page?>" method='GET'>
+<form action="<?php $page?>" method='POST'>
 <select name="timestamp" class="select-small" id='timestamp' onchange='ifweek()'>
 	<option value='today' selected>Today</option>
 	<option value='all'>All Time</option>
@@ -20,17 +20,15 @@ var ifweek = function (){
 	<option value='this_week'>This Week</option>
 	<option value='input_week'>Input Week...</option>
 </select>
-<!--
-<style>
-input[type=range]:before { content: attr(min); padding-right: 5px; }
-input[type=range]:after { content: attr(max); padding-left: 5px;}
-</style>-->
 <?php
-$thisWeekNum = $mysql->fetch($mysql->query('select week(now(),1)'))[0];
+$timeres = $mysql->fetch($mysql->query('select year(now()),week(now(),1)'));
+$weeknum = $timeres[1];
+$yearnum = $timeres[0];
 ?>
-<input type='number' name='weeknum' id='weeknum' placeholder='WeekNumber' min='0' max='53' value='<?php echo $thisWeekNum;?>' style='display:none;' />
-<!--<input type="range" name="weeknum" id='weeknum' step='1' min="0" max="53" value='' style='width:50%;display:none;' onchange='rangeres.value = weeknum.value;'/>
-<output name="rangeres" style='font-size:3em;display:inline;'></output>-->
+<div id='inputtime' style='display:none;'>
+	Week:<input type='number' name='weeknum' id='weeknum' placeholder='Week' min='0' max='53' value='<?php echo $weeknum;?>'/>
+	Year:<input type='number' name='yearnum' id='yearnum' placeholder='Year' min='2015' max='<?php echo $yearnum;?>' value='<?php echo $yearnum;?>'/>
+</div>
 <button type='submit' value='OK'>OK</button>
 </form>
 <?php
@@ -39,23 +37,18 @@ $today ="where date =(current_date())";
 $this_7_day = "where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date";
 $this_month = "where month(date) = month(now())";
 $this_week = "where week(date,1) = week(now(),1)";
-//$this_hour = "where hour(time) = hour(now()) and date =(current_date())";
-if(isset($_GET['timestamp'])){
-	if(isset($_GET['weeknum']) && $_GET['timestamp']=='input_week'){
+if(isset($_POST['timestamp'])){
+	if(isset($_POST['weeknum']) && $_POST['timestamp']=='input_week'){
 		$timestamp = 'this_week';
 		$condition = $this_week;
 		echo "<script>document.getElementById('timestamp').value = '$timestamp'</script>";
-		if($_GET['weeknum']!=''){
-			if($_GET['weeknum'] > $thisWeekNum){
-				echo "<script>alert('It\'s week $thisWeekNum now! Please input a smaller number');</script>";
-				$_GET['weeknum'] = $thisWeekNum;
-			}
-			$timestamp = 'week '.$_GET['weeknum'];
-			$condition = "where week(date,1) = ".$_GET['weeknum'];
-			echo "<script>document.getElementById('timestamp').value = 'input_week';ifweek();$('#weeknum').val('{$_GET['weeknum']}');</script>";
-		}
+		if(!empty($_POST['yearnum'])){$yearnum = $_POST['yearnum'];}
+		if($_POST['weeknum']!=''){$weeknum = $_POST['weeknum'];}
+		$timestamp = "week $weeknum of $yearnum";
+		$condition = "where week(date,1) = $weeknum and year(date) = $yearnum";
+		echo "<script>document.getElementById('timestamp').value = 'input_week';ifweek();$('#weeknum').val('$weeknum');</script>";
 	}else{
-		$timestamp=$_GET['timestamp'];
+		$timestamp=$_POST['timestamp'];
 		$condition = $$timestamp;
 		echo "<script>document.getElementById('timestamp').value = '$timestamp'</script>";
 	}

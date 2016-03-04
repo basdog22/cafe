@@ -62,7 +62,7 @@ if($action == 'new'){
 			echo "<td>".$row['cus_id']."</td>";
 			echo "<td>".$row['FirstName']."</td>";
 			echo "<td>".$row['LastName']."</td>";
-			echo "<td>".$row['Tel']."</td>";
+			echo "<td>".$row['tel']."</td>";
 			echo "<td>&#165;".$row_cre['credit']."</td>";
 			echo "</tr>";
 	    }

@@ -2,8 +2,8 @@
 <html>
     <head>
         <title>Laowai Cafe</title>
-        <link type="text/css" rel="stylesheet" href="css/style.css"/>
-        <link type="text/css" rel="stylesheet" href="css/kube.css"/>
+        <link type="text/css" rel="stylesheet" href="static/css/style.css"/>
+        <link type="text/css" rel="stylesheet" href="static/css/kube.css"/>
     </head>
     <body><br/><br/><br/><br/>
         <row centered>
