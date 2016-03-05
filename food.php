@@ -1,3 +1,5 @@
+	<script src="static/js/jquery-1.7.min.js"></script>
+	<script src="static/js/jquery.jqprint.js"></script>
 <script>
 	function changeQuan(id,valu){
 		document.getElementById(id).innerHTML = valu;	
@@ -7,6 +9,11 @@
 		var sum = parseInt(orig)+parseInt(valu);
 		document.getElementById(id).innerHTML = sum;
 	}
+	$(document).ready(function() { 
+		$("#print").click(function(){ 
+			$(".my_show").jqprint(); 
+		}) 
+	}); 
 </script>
 <?php
 if(isset($_GET['action'])){
@@ -81,10 +88,10 @@ if($action == 'cata'){
 	$timeres = $mysql->fetch($mysql->query('select year(now()),week(now(),1)'));
 	$weeknum = $timeres[1];
 	$yearnum = $timeres[0];
-	echo "<form method='post' action='index.php?page=food&action=weekly'>
+	echo "<div class='my_show'><form method='post' action='index.php?page=food&action=weekly'>
 			Week:<input type='number' name='weeknum' id='weeknum' placeholder='Week' min='0' max='53' value='$weeknum'/>
 			Year:<input type='number' name='yearnum' id='yearnum' placeholder='Year' min='2010' max='$yearnum' value='$yearnum'/>
-			<button type='submit' value='OK'>OK</button>
+			<button type='submit' value='OK' class='my_hidden'>OK</button>
 		</form>
 		";
 	if(isset($_POST['weeknum'])&&$_POST['weeknum']!=''){$weeknum = $_POST['weeknum'];}
@@ -93,9 +100,13 @@ if($action == 'cata'){
 			document.getElementById('weeknum').value = $weeknum;
 			document.getElementById('yearnum').value = $yearnum;
 		</script>";
+	$sql_subdate = "select DATE_ADD('$yearnum-01-01',INTERVAL (7*$weeknum-WEEKDAY('$yearnum-01-01')) DAY) AS start, DATE_ADD(DATE_ADD('$yearnum-01-01',INTERVAL (7*$weeknum-WEEKDAY('$yearnum-01-01')) DAY),INTERVAL 5 DAY) AS end;";
+	$subdate = $mysql->fetch($mysql->query($sql_subdate));
+	//$datestart = substr($subdate['start'],5);
+	//$dateend = substr($subdate['end'],5);
 	$sql_fcata = "select catalog_id,cata_name from food_catalogue where price IS NULL;";
-		$result_fcata = $mysql->query($sql_fcata);
-		echo "<table class ='table-stripped' id='report'>"; 
+		$result_fcata = $mysql->query($sql_fcata);		
+echo "<table class ='table-stripped'><th style='font-size:1.6em' class='text-centered' colspan='10'>Weekly's selling Food Diary: {$subdate['start']} to {$subdate['end']}</th>"; 
 		while($row_fcata = $mysql->fetch($result_fcata)) {
 			$cata_id = $row_fcata['catalog_id'];	
             $sql_finfo = "select food_id,s.cata_name as food_name,s.price from food_catalogue as s where s.catalog_id = ".$cata_id." and s.price IS NOT NULL;";
@@ -127,13 +138,14 @@ if($action == 'cata'){
 					<tr/>";
 	    }
 		echo "<tr>
-				<td class='fat'><b>AMOUNT TOTAL:&nbsp; &nbsp; <samp>&#165;<span id='total_all'>0</span></b></samp></td>
-			</tr></table>";
+				<td class='fat' colspan='8'><b>AMOUNT TOTAL:&nbsp; &nbsp; <samp>&#165;<span id='total_all'>0</span></b></samp></td>
+				<td><button type='primary'id='print'>Print</button></td>
+			</tr></table></div>";
 		//$quanRes=[];
 		for($dayweek=2;$dayweek<8;$dayweek++){
-			$sql="select of.food_id,sum(quantity),sum(quantity)*fc.price,fc.catalog_id from order_food as of join food_catalogue as fc ON of.food_id = fc.food_id where order_id in (select order_id from orders where week(date,1) = $weeknum and year(date)=$yearnum and dayofweek(date) = $dayweek) group by food_id";
+			$sql="select of.food_id,sum(quantity),sum(quantity)*fc.price,fc.catalog_id from order_food as of join food_catalogue as fc ON of.food_id = fc.food_id where order_id in (select order_id from orders where week(date,1) = $weeknum and year(date)=$yearnum and DAYOFWEEK(date) = $dayweek) group by food_id";
 			$res = $mysql->query($sql);
-			$zhou = $dayweek-1;
+			$zhou = $dayweek - 1;
 			while($row = $mysql->fetch($res)){
 				//$quanRes['day'.$zhou][$row[0]] = $row[1];
 				echo "<script>changeQuan('{$zhou}_{$row[0]}',{$row[1]});
@@ -141,8 +153,7 @@ if($action == 'cata'){
 							addQuan('{$zhou}_{$row[3]}',{$row[2]});
 							addQuan('q_{$row[3]}',{$row[1]});
 							addQuan('total_{$row[3]}',{$row[2]})
-							var totalWeek = parseInt(document.getElementById('total_{$row[3]}').innerHTML);
-							addQuan('total_all',totalWeek);
+							addQuan('total_all',{$row[2]});
 					</script>";
 			}
 		}

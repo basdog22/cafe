@@ -3,7 +3,7 @@
         <title>Cafe system</title>
 		<link type="text/css" rel="stylesheet" href="static/css/style.css"/>
         <link type="text/css" rel="stylesheet" href="static/css/kube.css"/>
-		<link type="text/css" rel="stylesheet" href="static/css/bootstrap.min.css">
+		<link type="text/css" rel="stylesheet" href="static/css/bootstrap.min.css"/>
   	  	<script src="static/js/jquery.min.js"></script>
   	  	<script src="static/js/bootstrap.min.js"></script>
     </head>
