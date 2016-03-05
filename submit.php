@@ -13,10 +13,12 @@
 			include "require/db.php";
             if(isset($_SESSION['food__quantity'])){
 				if(isset($_SESSION['order_id'])){
+				/**DELETE order*/
 					$sql_del="DELETE FROM orders WHERE order_id={$_SESSION['order_id']}";
 					$mysql->query($sql_del);
 					unset($_SESSION['order_id']);
 				}
+/**save new order info into array and INSERT each food item*/
 				$food__quantity=$_SESSION['food__quantity'];
 	            $cus_id = $_SESSION['cus_id'];	
 				unset($_SESSION['cus_id']);
@@ -35,6 +37,7 @@
                 echo "<div class='forms'><fieldset class='alert alert-success'><legend class='fat'>Create Order Successfully</legend>";  
                 header("refresh:1;url='index.php?page=current_orders'");				
             }else if(isset($_POST['lname'])){
+/**chaeck info and create a new customer*/				
 				if(!empty(preg_replace("/\s/","",(string)$_POST['lname']))){
 				$sql_newcus= "INSERT customer_info (firstname,lastname,tel) VALUE ('{$_POST['fname']}','".preg_replace("/\s/","",(string)$_POST['lname'])."','{$_POST['tel']}')";
 					$mysql->query($sql_newcus);

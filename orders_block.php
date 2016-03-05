@@ -1,5 +1,6 @@
 <script>
-	function paidstyle(orid){
+/**change block's style after click pay,edit,delete and more buttons*/	
+	function paidstyle(orid){	
 		document.getElementById('obnav'+orid).style.border='2px solid #0ab159';
 		document.getElementById('obnav'+orid).style.boxShadow='0px 0px 5px #0ab159';
 		document.getElementById('paid'+orid).style.visibility='visible';
@@ -48,8 +49,8 @@
 </script>
 <?php
 	include 'timecond.php';
-	if(!isset($rowNum)){$rowNum='';}
-	$sql = "select Order_id,o.cus_id,firstname as fname,lastname as lname,Date,Time,payed from orders as o LEFT JOIN customer_info as c ON o.cus_id = c.cus_id $condition ORDER BY order_id DESC $rowNum";
+/**sql that find all the orders and customer information in limited condition*/	
+	$sql = "select Order_id,o.cus_id,firstname as fname,lastname as lname,Date,Time,payed from orders as o LEFT JOIN customer_info as c ON o.cus_id = c.cus_id $condition ORDER BY order_id DESC";
 	$result = $mysql->query($sql);
 	while($row = $mysql->fetch($result)) {
 		if(empty($row['lname'])&&empty($row['fname'])){
@@ -63,6 +64,7 @@
 	<table class ='table-stripped' id='ob_tbl'>
 		<tr>
 		<?php
+/**count one orders' total price and item number*/
 			$sql1 = "select sum(f.price * quantity) as order_price, count(*) as num from order_food inner join food_catalogue as f ON order_food.food_id = f.food_id where order_id = {$row['Order_id']}";
 			$res=$mysql->query($sql1);
 			$row1=$mysql->fetch($res);
@@ -78,8 +80,10 @@
 			<td>Total Price</td>
 		</tr>
 		<?php
+/**find and show detail information of each order*/
 	$sql_de = "SELECT Item_id,F.order_id,cus.lastname as lname,Cs.cata_name as Food_name,Cp.Cata_name,Quantity,Cs.price as Single_Price,(Cs.price*quantity)as Total_Price,F.food_id from order_food as F JOIN orders as O on F.order_id = O.order_id JOIN food_catalogue as Cs ON F.food_id = Cs.food_id JOIN food_catalogue as Cp ON Cp.food_id = Cs.catalog_id LEFT JOIN customer_info as cus ON cus.cus_id = O.cus_id WHERE F.order_id= {$row['Order_id']}";
 			$result_de = $mysql->query($sql_de);
+/**action to create_order to edit if need*/
 			echo "<form id='formd{$row['Order_id']}' method='post' action='require/index.php?page=create_order'>";
 			$showtimes=0;
 			while($row_de = $mysql->fetch($result_de)) {
@@ -120,11 +124,13 @@
 			</span>
 			</form>
 			<?php
+/**function of pay order*/
 				if(isset($_GET["paid$row[0]"])){
 					$sql = "UPDATE orders SET payed=1 WHERE order_id= $row[0]";
 					$mysql->query($sql);
 					echo "<script>paidstyle($row[0]);</script>";
 				}
+/**change style if more than 3 row*/
 				if($num > 3){	
 					echo "<div id='more$row[0]' class='morerow' onclick='morebtn($row[0],$num)'>&nbsp&nbsp&nbsp;<a>More</a>&nbsp &nbsp &nbsp;</div>";
 					echo "<div id='fold$row[0]' class='morerow' style='display:none;' onclick='foldbtn($row[0])'>&nbsp&nbsp&nbsp;<a>Fold</a>&nbsp &nbsp &nbsp;</div>";
@@ -138,6 +144,7 @@
 </div>
 <?php
 	}
+/**function of delete order*/
 	if(isset($_POST['nam'])){
 			$delId = $_POST['nam'];
 			echo "<script>document.getElementById('obnav'+$delId).style.display='none';</script>";

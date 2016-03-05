@@ -5,7 +5,7 @@ if(isset($_GET['action'])){
 	$action='info';
 }
 if($action == 'new'){
-	/**query customers ID and show new customer form*/
+/**query customers ID and show new customer form*/
 	$sql_cusinfo = "SELECT cus_id from customer_info order by cus_id DESC;";
 			$result = $mysql->query($sql_cusinfo); 
 			$row = $mysql->fetch($result);
@@ -42,7 +42,7 @@ if($action == 'new'){
 	</div>
 	</form>";	
 }else if($action == 'info'){
-	/**show all customer's information*/
+/**show all customer's information*/
 		$sql_cusinfo = "SELECT * FROM customer_info;";
 		$result = $mysql->query($sql_cusinfo);
 		echo "<form action='require/index.php?page=customer_info' method='post'><table class ='table-stripped'>";

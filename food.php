@@ -1,6 +1,8 @@
 	<script src="static/js/jquery-1.7.min.js"></script>
 	<script src="static/js/jquery.jqprint.js"></script>
+	<!-- jQprint -->
 <script>
+/**functions of change data in report*/
 	function changeQuan(id,valu){
 		document.getElementById(id).innerHTML = valu;	
 	}
@@ -22,7 +24,7 @@ if(isset($_GET['action'])){
 	$action = 'detail';
 }
 if($action == 'cata'){
-	/**Show Catalogue of food*/
+/**Show Catalogue of food*/
 	$sql = "SELECT catalog_id,cata_name from food_catalogue where food_id = catalog_id and food_id != 51;"; 
 	    $result = $mysql->query($sql); 
         echo "<table class ='table-stripped'>"; 
@@ -36,7 +38,7 @@ if($action == 'cata'){
         }
         echo "</table>";
 }else if($action == 'detail'){
-	/**Show food detail*/
+/**Show food detail*/
 	$sql = "select s.food_id,s.cata_name as food_name,s.price,p.cata_name from food_catalogue as s join food_catalogue as p where p.food_id = s.catalog_id and s.price IS NOT NULL;"; 
 	    $result = $mysql->query($sql);
         echo "<table class ='table-stripped'>"; 
@@ -52,7 +54,7 @@ if($action == 'cata'){
         }
         echo "</table>";
 }else if($action == 'sold'){
-	/**Show food sold information*/
+/**Show food sold information*/
 	$sql_fcata = "select catalog_id,cata_name from food_catalogue where price IS NULL;";
 		$result_fcata = $mysql->query($sql_fcata);
 		echo "<table class ='table-stripped'>"; 
@@ -75,6 +77,7 @@ if($action == 'cata'){
 	        }   
 	    }echo "</table>";
 }else if($action== 'weekly'){
+/**show weekly report*/
 	/*echo "<style>
 			input[type=range]:before { content: attr(min); padding-right: 5px; }
 			input[type=range]:after { content: attr(max); padding-left: 5px;}
@@ -85,6 +88,7 @@ if($action == 'cata'){
 		</script>
 		<b>Week <span id='rangeres'><span></b>
 		<input type='range' id='weeknum' step='1' min='0' max='53' onchange='changenum()'/>";*/
+/**a form to change week and year, default is now*/
 	$timeres = $mysql->fetch($mysql->query('select year(now()),week(now(),1)'));
 	$weeknum = $timeres[1];
 	$yearnum = $timeres[0];
@@ -100,10 +104,10 @@ if($action == 'cata'){
 			document.getElementById('weeknum').value = $weeknum;
 			document.getElementById('yearnum').value = $yearnum;
 		</script>";
+/**active sql to find the date of Mon. to Sat.*/	
 	$sql_subdate = "select DATE_ADD('$yearnum-01-01',INTERVAL (7*$weeknum-WEEKDAY('$yearnum-01-01')) DAY) AS start, DATE_ADD(DATE_ADD('$yearnum-01-01',INTERVAL (7*$weeknum-WEEKDAY('$yearnum-01-01')) DAY),INTERVAL 5 DAY) AS end;";
 	$subdate = $mysql->fetch($mysql->query($sql_subdate));
-	//$datestart = substr($subdate['start'],5);
-	//$dateend = substr($subdate['end'],5);
+/**show weekly report table*/
 	$sql_fcata = "select catalog_id,cata_name from food_catalogue where price IS NULL;";
 		$result_fcata = $mysql->query($sql_fcata);		
 echo "<table class ='table-stripped'><th style='font-size:1.6em' class='text-centered' colspan='10'>Weekly's selling Food Diary: {$subdate['start']} to {$subdate['end']}</th>"; 
@@ -141,13 +145,12 @@ echo "<table class ='table-stripped'><th style='font-size:1.6em' class='text-cen
 				<td class='fat' colspan='8'><b>AMOUNT TOTAL:&nbsp; &nbsp; <samp>&#165;<span id='total_all'>0</span></b></samp></td>
 				<td><button type='primary'id='print'>Print</button></td>
 			</tr></table></div>";
-		//$quanRes=[];
+/**stastic data and write it on the report table*/
 		for($dayweek=2;$dayweek<8;$dayweek++){
 			$sql="select of.food_id,sum(quantity),sum(quantity)*fc.price,fc.catalog_id from order_food as of join food_catalogue as fc ON of.food_id = fc.food_id where order_id in (select order_id from orders where week(date,1) = $weeknum and year(date)=$yearnum and DAYOFWEEK(date) = $dayweek) group by food_id";
 			$res = $mysql->query($sql);
 			$zhou = $dayweek - 1;
 			while($row = $mysql->fetch($res)){
-				//$quanRes['day'.$zhou][$row[0]] = $row[1];
 				echo "<script>changeQuan('{$zhou}_{$row[0]}',{$row[1]});
 							addQuan('q_{$row[0]}',{$row[1]});
 							addQuan('{$zhou}_{$row[3]}',{$row[2]});
@@ -157,6 +160,5 @@ echo "<table class ='table-stripped'><th style='font-size:1.6em' class='text-cen
 					</script>";
 			}
 		}
-		//print_r($quanRes);
 }
 ?>

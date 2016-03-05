@@ -1,4 +1,5 @@
 <script>
+/**function of add,minus,show,hide and check input number*/
 	function a(fid){ 
 		var x=document.getElementById(fid).value; 
 		if(x.length==0){ x=0; }
@@ -33,6 +34,7 @@
 <?php
 	session_start();
 	error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
+/**save food catalogue and customers full name into arrays*/
 	$sql_fcata = "select catalog_id,cata_name from food_catalogue where food_id = catalog_id";
 	$result_fcata = $mysql->query($sql_fcata);
 	$sql_cusinfo = "SELECT cus_id,CONCAT(firstname,' ',lastname) FROM customer_info ORDER BY firstname, lastname";
@@ -42,17 +44,18 @@
 			<div class='big'><b>Customer:</b>
 				<select name='cus_id' id='cus'>
 					<option value='0'>--</option>
-					<?php 
+				<?php 
 					while($row = $mysql->fetch($result_cusinfo)) {
 						echo "<option value=$row[0]>$row[1]</option>";
 					}	
-					?>
+				?>
 				</select>
 				<button id='createbtn' type='primary'>Create New</button>
 			</div>
 			<div class='create_order'>
 				<table class ='table-stripped'>
 	<?php
+/**output all the food items of each type of food*/
 		while($row_fcata = $mysql->fetch($result_fcata)) {
 			$cata_id = $row_fcata['catalog_id']; 
 	        $sql_finfo = "select s.food_id,s.cata_name as food_name,s.price,s.catalog_id from food_catalogue as s join food_catalogue as p where p.food_id = s.catalog_id and s.price IS NOT NULL and s.catalog_id = $cata_id"; 
@@ -77,6 +80,9 @@
 </div>
 <div id='create_page'>
 	<?php 
+/**IT'S THE EDIT FUNCTION. When 'order_block.php' post this page,it can get the order data and write on the 'create order' input form;
+session['times'] is a counter to make sure session['order_id'] directly comes from 'order_block.php', otherwise, if user refersh,
+ go to other page or cancel order while editing order, the session['order_id'] is still here.*/	
 		if(isset($_POST['fd_quan'])){
 			$fd_quan=$_POST['fd_quan'];
 			$od_cus=$_POST['od_cus'];
@@ -117,6 +123,7 @@
 		</script>
 		<?php
 			date_default_timezone_set('PRC'); 
+/**save food items detail information into array*/
             $sql_foodinfo = "select s.food_id,s.cata_name as food_name,s.price,p.cata_name from food_catalogue as s join food_catalogue as p where p.food_id = s.catalog_id and  s.food_id != s.catalog_id;";
             $result = $mysql->query($sql_foodinfo);
             $food_cata_info = array();
@@ -128,6 +135,8 @@
 	            $food_cata_info['cata'][$row['food_id']] = $row['cata_name'];
             }
 			$datetime = date('d/m/y h:i:s',time());
+/**Result part(right part) of create new order*/
+/**get customer_id and search name*/
 			if(isset($_POST['cus_id'])){
 				if(!empty($_POST['cus_id'])){
 					$cus_id = (int)$_POST['cus_id'];
@@ -146,7 +155,7 @@
 			<td style='font-size: 26px;border-right:0px;' >".$cusname."&nbsp</td>
 			<td colspan='2' style='border-left:0;text-align:right;' id='time'>$datetime</td></tr>";
             echo "<tr class='fat'><td>Food Name</td><td>Price</td><td>Quantity</td></tr>"; 
-		    $create_res = array();
+/**get information of new order,and give print,submit,modify and reset function; Count total price, if it < 0, disabled the submit button*/
 			$totalp = 0;
 			if(isset($_POST['odfood'])){
 				$food__quantity=array_filter($_POST['odfood']);
@@ -203,8 +212,6 @@
 				echo"</table>";
 			}
         ?>
-		
-
 </div>
 
 

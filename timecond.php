@@ -1,4 +1,5 @@
 <script>
+/**if choose input week, show the input form, otherwise hide it*/
 var ifweek = function (){
 	var weekNumInput = document.getElementById('inputtime');
 	var timestamp = document.getElementById('timestamp');
@@ -32,6 +33,7 @@ $yearnum = $timeres[0];
 <button type='submit' value='OK'>OK</button>
 </form>
 <?php
+/**some sql condition to use*/
 $all = '';
 $today ="where date =(current_date())";
 $this_7_day = "where DATE_SUB(CURDATE(), INTERVAL 7 DAY) <= date";
@@ -39,6 +41,7 @@ $this_month = "where month(date) = month(now())";
 $this_week = "where week(date,1) = week(now(),1)";
 if(isset($_POST['timestamp'])){
 	if(isset($_POST['weeknum']) && $_POST['timestamp']=='input_week'){
+/**get the week number, change it on the input form, and change sql condition*/		
 		$timestamp = 'this_week';
 		$condition = $this_week;
 		echo "<script>document.getElementById('timestamp').value = '$timestamp'</script>";
