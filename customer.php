@@ -23,11 +23,11 @@ if($action == 'new'){
 		<tr>
 			<td class='bold'>First Name</td>
 			<td>
-				<input type='text' maxlength='10' name='fname'/>
+				<input type='text' maxlength='10' name='fname'required/>
 			</td>
 			<td class='bold'>Last Name<span class='req'> *</span></td>
 			<td>
-				<input type='text' maxlength='10' name='lname' required/>
+				<input type='text' maxlength='10' name='lname'/>
 			</td>
 		</tr>
 		<tr>
