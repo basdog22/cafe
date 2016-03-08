@@ -84,7 +84,7 @@
 	$sql_de = "SELECT Item_id,F.order_id,cus.lastname as lname,Cs.cata_name as Food_name,Cp.Cata_name,Quantity,Cs.price as Single_Price,(Cs.price*quantity)as Total_Price,F.food_id from order_food as F JOIN orders as O on F.order_id = O.order_id JOIN food_catalogue as Cs ON F.food_id = Cs.food_id JOIN food_catalogue as Cp ON Cp.food_id = Cs.catalog_id LEFT JOIN customer_info as cus ON cus.cus_id = O.cus_id WHERE F.order_id= {$row['Order_id']}";
 			$result_de = $mysql->query($sql_de);
 /**action to create_order to edit if need*/
-			echo "<form id='formd{$row['Order_id']}' method='post' action='require/index.php?page=create_order'>";
+			echo "<form id='formd{$row['Order_id']}' method='post' action='index.php?page=create_order'>";
 			$showtimes=0;
 			while($row_de = $mysql->fetch($result_de)) {
 				$showtimes++;
