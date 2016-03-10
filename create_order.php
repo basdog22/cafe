@@ -109,6 +109,7 @@ session['times'] is a counter to make sure session['order_id'] directly comes fr
 		}			
 	?>
 		<script>
+/**print time and refresh in every 1s*/		
 			function printTime(){
 				var d = new Date();
 				var year = d.getFullYear();
@@ -176,7 +177,7 @@ session['times'] is a counter to make sure session['order_id'] directly comes fr
 				echo "<tr><td colspan='2' class='fat'>Total Price</td><td colspan='2' class='text-centered'>&#165;  ".$totalp."</td></tr></table></form>";
 				echo "<script>document.getElementById('createbtn').style.display= 'none'</script>";
 		?>
-				<script> 
+				<script> 				
 					function printdiv(printpage) { 
 						var headstr = "<html><head><title></title></head><body>"; 
 						var footstr = "</body>"; 

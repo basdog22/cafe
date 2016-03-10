@@ -36,10 +36,10 @@
                 }
                 echo "<div class='forms'><fieldset class='alert alert-success'><legend class='fat'>Create Order Successfully</legend>";  
                 header("refresh:1;url='index.php?page=current_orders'");				
-            }else if(isset($_POST['lname'])){
+            }else if(isset($_POST['fname'])){
 /**chaeck info and create a new customer*/				
-				if(!empty(preg_replace("/\s/","",(string)$_POST['lname']))){
-				$sql_newcus= "INSERT customer_info (firstname,lastname,tel) VALUE ('{$_POST['fname']}','".preg_replace("/\s/","",(string)$_POST['lname'])."','{$_POST['tel']}')";
+				if(!empty(preg_replace("/\s/","",(string)$_POST['fname']))){
+				$sql_newcus= "INSERT customer_info (firstname,lastname,tel) VALUE ('".preg_replace("/\s/","",(string)$_POST['fname'])."','".preg_replace("/\s/","",(string)$_POST['lname'])."','{$_POST['tel']}')";
 					$mysql->query($sql_newcus);
 					echo "<div class='forms'><fieldset class='alert alert-success'><legend class='fat'>Add Customer Successfully</legend>";
 					header("refresh:1;url='index.php?page=customer&action=info'");

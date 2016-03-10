@@ -11,11 +11,11 @@
 		var sum = parseInt(orig)+parseInt(valu);
 		document.getElementById(id).innerHTML = sum;
 	}
-	$(document).ready(function() { 
-		$("#print").click(function(){ 
+	function print(){
+		$(document).ready(function() { 
 			$(".my_show").jqprint(); 
-		}) 
-	}); 
+			});
+	}
 </script>
 <?php
 if(isset($_GET['action'])){
@@ -97,6 +97,7 @@ if($action == 'cata'){
 			Year:<input type='number' name='yearnum' id='yearnum' placeholder='Year' min='2010' max='$yearnum' value='$yearnum'/>
 			<button type='submit' value='OK' class='my_hidden'>OK</button>
 		</form>
+		<button style='margin-left:76%;margin-top:-4%;float:right;position:absolute' type='primary' onclick='print()'>Print</button>
 		";
 	if(isset($_POST['weeknum'])&&$_POST['weeknum']!=''){$weeknum = $_POST['weeknum'];}
 	if(!empty($_POST['yearnum'])){$yearnum = $_POST['yearnum'];}
@@ -143,7 +144,7 @@ echo "<table class ='table-stripped'><th style='font-size:1.6em' class='text-cen
 	    }
 		echo "<tr>
 				<td class='fat' colspan='8'><b>AMOUNT TOTAL:&nbsp; &nbsp; <samp>&#165;<span id='total_all'>0</span></b></samp></td>
-				<td><button type='primary'id='print'>Print</button></td>
+				<td><button type='primary' onclick='print()'>Print</button></td>
 			</tr></table></div>";
 /**stastic data and write it on the report table*/
 		for($dayweek=2;$dayweek<8;$dayweek++){
