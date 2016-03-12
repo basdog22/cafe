@@ -11,14 +11,17 @@
         <?php
 			session_start();
 			include "require/db.php";
+			echo "<div class='forms'>
+					<fieldset class='alert alert-success'>
+					<legend class='fat'>";
             if(isset($_SESSION['food__quantity'])){
 				if(isset($_SESSION['order_id'])){
-				/**DELETE order*/
+/**To edit an order, first need to DELETE previous order*/
 					$sql_del="DELETE FROM orders WHERE order_id={$_SESSION['order_id']}";
 					$mysql->query($sql_del);
 					unset($_SESSION['order_id']);
 				}
-/**save new order info into array and INSERT each food item*/
+/**save new order info into array, create new order and INSERT each food item*/
 				$food__quantity=$_SESSION['food__quantity'];
 	            $cus_id = $_SESSION['cus_id'];	
 				unset($_SESSION['cus_id']);
@@ -34,21 +37,24 @@
                     $sql_insertf = "INSERT order_food(order_id,food_id,quantity) VALUE(".$order_id.",".$food_id.",".$quantity.")";
                     $mysql->query($sql_insertf);
                 }
-                echo "<div class='forms'><fieldset class='alert alert-success'><legend class='fat'>Create Order Successfully</legend>";  
+                echo "Create Order Successfully";  
                 header("refresh:1;url='index.php?page=current_orders'");				
             }else if(isset($_POST['fname'])){
 /**chaeck info and create a new customer*/				
 				if(!empty(preg_replace("/\s/","",(string)$_POST['fname']))){
-				$sql_newcus= "INSERT customer_info (firstname,lastname,tel) VALUE ('".preg_replace("/\s/","",(string)$_POST['fname'])."','".preg_replace("/\s/","",(string)$_POST['lname'])."','{$_POST['tel']}')";
+					$sql_newcus= "INSERT customer_info (firstname,lastname,tel) VALUE ('".preg_replace("/\s/","",(string)$_POST['fname'])."','".preg_replace("/\s/","",(string)$_POST['lname'])."','{$_POST['tel']}')";
 					$mysql->query($sql_newcus);
-					echo "<div class='forms'><fieldset class='alert alert-success'><legend class='fat'>Add Customer Successfully</legend>";
+					echo "Add Customer Successfully";
 					header("refresh:1;url='index.php?page=customer&action=info'");
 				}else{
 					echo "<script> history.back(-1)</script>";
 				}
             }
-            echo "<p>Back to Home Page in 1 seconds...</p>";
-            echo "<a href='index.php'>Back to Homepage immdiately</a></fieldset></div>";
+			echo "		</legend>
+						<p>Back to Home Page in 1 seconds...</p>
+						<a href='index.php'>Back to Homepage immdiately</a>
+					</fieldset>
+				</div>";
         ?>
         </column>
         </row>

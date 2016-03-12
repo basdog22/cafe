@@ -49,28 +49,28 @@
 </script>
 <?php
 	include 'timecond.php';
-/**sql that find all the orders and customer information in limited condition*/	
-	$sql = "select Order_id,o.cus_id,firstname as fname,lastname as lname,Date,Time,payed from orders as o LEFT JOIN customer_info as c ON o.cus_id = c.cus_id $condition ORDER BY order_id DESC";
-	$result = $mysql->query($sql);
-	while($row = $mysql->fetch($result)) {
-		if(empty($row['lname'])&&empty($row['fname'])){
+/**query all the orders and customer information in limited condition*/	
+	$sql_orders = "select Order_id,o.cus_id,firstname as fname,lastname as lname,Date,Time,payed from orders as o LEFT JOIN customer_info as c ON o.cus_id = c.cus_id $condition ORDER BY order_id DESC";
+	$result = $mysql->query($sql_orders);
+	while($row_order = $mysql->fetch($result)) {
+		if(empty($row_order['lname'])&&empty($row_order['fname'])){
 			$cusname='Unknown';
 		}else{
-			$cusname=$row['fname']."&nbsp".$row['lname'];
+			$cusname=$row_order['fname']."&nbsp".$row_order['lname'];
 		}
 ?>
-<div class='order_block' id='ob<?php echo $row[0];?>'>
-  <div class='ob_nav' id='obnav<?php echo $row[0];?>'>
+<div class='order_block' id='ob<?php echo $row_order[0];?>'>
+  <div class='ob_nav' id='obnav<?php echo $row_order[0];?>'>
 	<table class ='table-stripped' id='ob_tbl'>
 		<tr>
 		<?php
 /**count one orders' total price and item number*/
-			$sql1 = "select sum(f.price * quantity) as order_price, count(*) as num from order_food inner join food_catalogue as f ON order_food.food_id = f.food_id where order_id = {$row['Order_id']}";
-			$res=$mysql->query($sql1);
-			$row1=$mysql->fetch($res);
-			$num=$row1['num'];
+		$sql_order_price = "select sum(f.price * quantity) as order_price, count(*) as num from order_food inner join food_catalogue as f ON order_food.food_id = f.food_id where order_id = {$row_order['Order_id']}";
+			$res=$mysql->query($sql_order_price);
+			$row_item=$mysql->fetch($res);
+			$num=$row_item['num'];
 			echo "<th colspan='2'>$cusname</th>";
-			echo "<th class='text-right' colspan='2'>".substr($row['Date'],5)."&nbsp".substr($row['Time'],0,5)."</th>";
+			echo "<th class='text-right' colspan='2'>".substr($row_order['Date'],5)."&nbsp".substr($row_order['Time'],0,5)."</th>";
 			?>
 		</tr>
 		<tr id='ob_tbl_th'>
@@ -81,63 +81,75 @@
 		</tr>
 		<?php
 /**find and show detail information of each order*/
-	$sql_de = "SELECT Item_id,F.order_id,cus.lastname as lname,Cs.cata_name as Food_name,Cp.Cata_name,Quantity,Cs.price as Single_Price,(Cs.price*quantity)as Total_Price,F.food_id from order_food as F JOIN orders as O on F.order_id = O.order_id JOIN food_catalogue as Cs ON F.food_id = Cs.food_id JOIN food_catalogue as Cp ON Cp.food_id = Cs.catalog_id LEFT JOIN customer_info as cus ON cus.cus_id = O.cus_id WHERE F.order_id= {$row['Order_id']}";
-			$result_de = $mysql->query($sql_de);
-/**action to create_order to edit if need*/
-			echo "<form id='formd{$row['Order_id']}' method='post' action='index.php?page=create_order'>";
+		$sql_item_detail = "SELECT Item_id,F.order_id,cus.lastname as lname,Cs.cata_name as Food_name,Cp.Cata_name,Quantity,Cs.price as Single_Price,(Cs.price*quantity)as Total_Price,F.food_id from order_food as F JOIN orders as O on F.order_id = O.order_id JOIN food_catalogue as Cs ON F.food_id = Cs.food_id JOIN food_catalogue as Cp ON Cp.food_id = Cs.catalog_id LEFT JOIN customer_info as cus ON cus.cus_id = O.cus_id WHERE F.order_id= {$row_order['Order_id']}";
+			$result_item_detail = $mysql->query($sql_item_detail);
+/**action to create_order to edit order if user need*/
+			echo "<form id='formd{$row_order['Order_id']}' method='post' action='index.php?page=create_order'>";
 			$showtimes=0;
-			while($row_de = $mysql->fetch($result_de)) {
+			while($row_item_detail = $mysql->fetch($result_item_detail)) {
 				$showtimes++;
+/**if an order have more than 4 items, it should be fold*/
 				if ($showtimes<4){
-					echo "<tr id='ob_tbl_tb' >";
-					echo "<td>".$row_de['Food_name']." </td>";
-					echo "<td>".$row_de['Quantity']." </td>";
-					echo "<td>&#165;".$row_de['Single_Price']." </td>";
-					echo "<td>&#165;".$row_de['Total_Price']." </td></tr>";
+					echo "<tr id='ob_tbl_tb' >
+							<td>".$row_item_detail['Food_name']." </td>
+							<td>".$row_item_detail['Quantity']." </td>
+							<td>&#165;".$row_item_detail['Single_Price']." </td>
+							<td>&#165;".$row_item_detail['Total_Price']." </td>
+						</tr>";
 				}else{
-					echo "<tr id='ob_tbl_tb1'>";
-					echo "<td  class='obtd$row[0]'>".$row_de['Food_name']." </td>";
-					echo "<td  class='obtd$row[0]'>".$row_de['Quantity']." </td>";
-					echo "<td  class='obtd$row[0]'>&#165;".$row_de['Single_Price']." </td>";
-					echo "<td  class='obtd$row[0]'>&#165;".$row_de['Total_Price']." </td></tr>";
+					echo "<tr id='ob_tbl_tb1'>
+							<td  class='obtd$row_order[0]'>".$row_item_detail['Food_name']." </td>
+							<td  class='obtd$row_order[0]'>".$row_item_detail['Quantity']." </td>
+							<td  class='obtd$row_order[0]'>&#165;".$row_item_detail['Single_Price']." </td>
+							<td  class='obtd$row_order[0]'>&#165;".$row_item_detail['Total_Price']." </td>
+						</tr>";
 				}
-				echo "<input type='hidden' name='fd_quan[{$row_de['food_id']}]' value='{$row_de['Quantity']}'/>";
+/**save food_id, quantity, order_id and cus_id in hidden input*/	
+				echo "<input type='hidden' name='fd_quan[{$row_item_detail['food_id']}]' value='{$row_item_detail['Quantity']}'/>";
 			}
-			echo "<input type='hidden' name='od_cus[{$row['Order_id']}]' value='{$row['cus_id']}'/>";
-			echo "</form>";
+			echo "<input type='hidden' name='od_cus[{$row_order['Order_id']}]' value='{$row_order['cus_id']}'/>
+				</form>";
+			/*fill in blank row if the order have less than 3 items*/	
 			for($n=$num;$n<3;$n++){
 				echo "<tr id='ob_tbl_tb'><td>&nbsp</td><td>&nbsp</td><td>&nbsp</td><td>&nbsp</td></tr>";
 			}		
-			echo "<tr id='ob_tbl_tb'><th colspan='2' id='paid'><span id='paid$row[0]'>Paid</span></th><th class='text-right' colspan='2'>{$row1['order_price']}&nbspRMB</th></tr>";
+			echo "<tr id='ob_tbl_tb'>
+					<th colspan='2' id='paid'><span id='paid$row_order[0]'>Paid</span></th>
+					<th class='text-right' colspan='2'>{$row_item['order_price']}&nbspRMB</th>
+				</tr>";
 		?>
 	</table>
 		<nav id='paybtn'>
-			<span id="btn2<?php echo $row[0];?>">
-			<form method='get' action=''>
-			<button type="primary" name='paid<?php echo $row[0];?>' style='display:none;'/>
-			</form>
-			<button type="primary"  onclick="payOrder('<?php echo $row[0];?>')">Pay</button>
-			<button type='submit' name='edit' onclick="submit('<?php echo $row[0];?>')">Edit</button>
-			<form method='post' action=''>
-			<kbd onclick="deleteOrder('<?php echo $row['Order_id'];?>')">x</kbd>
-			<input id='del<?php echo $row['Order_id'];?>' type='submit' name='nam' value='<?php echo $row['Order_id'];?>' style='display:none;'/>
+			<span id="btn2<?php echo $row_order[0];?>">
+				<form method='get' action=''>
+					<button type="primary" name='paid<?php echo $row_order[0];?>' style='display:none;'/>
+				</form>
+				<button type="primary"  onclick="payOrder('<?php echo $row_order[0];?>')">Pay</button>
+				<button type='submit' name='edit' onclick="submit('<?php echo $row_order[0];?>')">Edit</button>
+				<form method='post' action=''>
+					<kbd onclick="deleteOrder('<?php echo $row_order['Order_id'];?>')">x</kbd>
+					<input id='del<?php echo $row_order['Order_id'];?>' type='submit' name='nam' value='<?php echo $row_order['Order_id'];?>' style='display:none;'/>
+				</form>
 			</span>
-			</form>
 			<?php
 /**function of pay order*/
-				if(isset($_GET["paid$row[0]"])){
-					$sql = "UPDATE orders SET payed=1 WHERE order_id= $row[0]";
-					$mysql->query($sql);
-					echo "<script>paidstyle($row[0]);</script>";
-				}
+			if(isset($_GET["paid$row_order[0]"])){
+				$sql_pay = "UPDATE orders SET payed=1 WHERE order_id= $row_order[0]";
+				$mysql->query($sql_pay);
+				echo "<script>paidstyle($row_order[0]);</script>";
+			}
 /**change style if more than 3 row*/
-				if($num > 3){	
-					echo "<div id='more$row[0]' class='morerow' onclick='morebtn($row[0],$num)'>&nbsp&nbsp&nbsp;<a>More</a>&nbsp &nbsp &nbsp;</div>";
-					echo "<div id='fold$row[0]' class='morerow' style='display:none;' onclick='foldbtn($row[0])'>&nbsp&nbsp&nbsp;<a>Fold</a>&nbsp &nbsp &nbsp;</div>";
-				}
-				if($row['payed']==1){
-				echo "<script>paidstyle('$row[0]')</script>";
-				}
+			if($num > 3){	
+				echo "<div id='more$row_order[0]' class='morerow' onclick='morebtn($row_order[0],$num)'>
+						&nbsp&nbsp&nbsp;<a>More</a>&nbsp &nbsp &nbsp;
+					</div>
+					<div id='fold$row_order[0]' class='morerow' style='display:none;' onclick='foldbtn($row_order[0])'>
+						&nbsp&nbsp&nbsp;<a>Fold</a>&nbsp &nbsp &nbsp;
+					</div>";
+			}
+			if($row_order['payed']==1){
+				echo "<script>paidstyle('$row_order[0]')</script>";
+			}
 			?>
 		</nav>
   </div>
@@ -150,7 +162,8 @@
 			echo "<script>document.getElementById('obnav'+$delId).style.display='none';</script>";
 			$mysql->query("DELETE FROM orders WHERE order_id = $delId");
 		}
-	if(empty($row1)){
+/**if row_item is not empty,row_order must not be empty(no orders).Because it's outside of while loop,so it only can use row_item*/		
+	if(empty($row_item)){
 		echo "No orders for $timestamp yet";
 	}
 	
