@@ -23,7 +23,7 @@ if(isset($_GET['action'])){
 }else{
 	$action = 'detail';
 }
-$sql_fcata = "select catalog_id,cata_name from food_catalogue where price IS NULL;";
+$sql_fcata = "select catalog_id,cata_name from food_catalogue where price IS NULL ORDER by catalog_id";
 $result_fcata = $mysql->query($sql_fcata);
 if($action == 'cata'){
 /**Show Catalogue of food*/
@@ -41,8 +41,9 @@ if($action == 'cata'){
     echo "</table>";
 }else if($action == 'detail'){
 /**Show food detail*/
-	$sql_fdetail = "select s.food_id,s.cata_name as food_name,s.price,p.cata_name from food_catalogue as s join food_catalogue as p where p.food_id = s.catalog_id and s.price IS NOT NULL;"; 
+	$sql_fdetail = "select s.food_id,s.cata_name as food_name,s.price,p.cata_name,s.catalog_id AS catid, p.catalog_id AS catid2 from food_catalogue as s join food_catalogue as p where p.catalog_id = s.catalog_id and s.price IS NOT NULL GROUP BY food_id"; 
 	    $result = $mysql->query($sql_fdetail);
+		
         echo "<table class ='table-stripped'>
 				<th colspan='4'>Food Category:</th>
 				<tr>
