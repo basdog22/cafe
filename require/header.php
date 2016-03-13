@@ -49,16 +49,18 @@
 				}
 				 if ($page == 'create_order' || ($_GET['action']=='weekly') || $_GET['action']=='sold') {
 					echo "<a href=#Sandwiches>Sandwiches</a><br/>";
+					echo "<a href=#DIY>DIY</a><br/>";
+					echo "<a href=#Meals>Meals</a><br/>";
 					echo "<a href=#Salads>Salads</a><br/>";
 					echo "<a href=#Eggs>Eggs</a> <br/>";
-					echo "<a href=#BREAKFAST>Breakfast</a><br/>";
+					echo "<a href=#Breakfast>Breakfast</a><br/>";
 					echo "<a href=#Patisserie>Patisserie</a><br/>";
-					echo "<a href=#COFFEE>COFFEE</a><br/>";
-					echo "<a href=#HotChocolate>HotChocolate</a><br/>";
+					echo "<a href=#Coffee>Coffee</a><br/>";
+					echo "<a href=#HotChocolate>Hot Chocolate</a><br/>";
 					echo "<a href=#Tea>Tea</a><br/>";
 					echo "<a href=#Beverage>Beverage</a><br/>";
 					echo "<a href=#Milkshakes>Milkshakes</a><br/>";
-					echo "<a href=#Special>Special</a><br/>";
+					echo "<a href=#Discounts>Discounts</a><br/>";
 				}
 				?>
 				<a href=#bottom><img src='static/img/down.png'/></a>
