@@ -3,7 +3,7 @@
 	error_reporting(E_ALL^E_NOTICE^E_WARNING^E_DEPRECATED);
 	date_default_timezone_set('PRC'); 
 /**save food catalogue and customers full name into arrays*/
-	$sql_fcata = "select catalog_id,cata_name from food_catalogue where food_id = catalog_id";
+	$sql_fcata = "SELECT catalog_id,cata_name FROM food_catalogue WHERE price IS NULL ORDER BY catalog_id";
 	$result_fcata = $mysql->query($sql_fcata);
 	$sql_cusinfo = "SELECT cus_id,CONCAT(firstname,' ',lastname) FROM customer_info ORDER BY firstname, lastname";
 	$result_cusinfo = $mysql->query($sql_cusinfo);
