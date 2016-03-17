@@ -6,8 +6,9 @@
 		document.getElementById('paid'+orid).style.visibility='visible';
 		document.getElementById('btn2'+orid).style.display='none';
 		if(document.getElementById('more'+orid)){
-			document.getElementById('more'+orid).style.wordSpacing='37px'; 
-		}
+			document.getElementById('more'+orid).style.marginLeft='240px'; 
+			document.getElementById('fold'+orid).style.marginLeft='240px';
+		}		
 	}
 	function submit(orid){
 		document.getElementById('formd'+orid).submit();
@@ -28,7 +29,6 @@
 		document.getElementById('obnav'+orid).style.height= ((40*(t-3))+280)+'px';
 		document.getElementById('more'+orid).style.display='none';
 		document.getElementById('fold'+orid).style.display='inline';
-		document.getElementById('fold'+orid).style.borderTop='none';
 		var x = document.getElementsByClassName('obtd'+orid);
 		var i;
 		for (i=0;i<x.length;i++){
@@ -42,10 +42,20 @@
 		}
 	}
 	function deleteOrder(orid){
-	if(confirm('Do you want to delete '+orid+' order ?')){
-		document.getElementById('del'+orid).click();
+		if(confirm('Do you want to delete '+orid+' order ?')){
+			document.getElementById('del'+orid).click();
+		}
 	}
-}
+	function printdiv(printpage) { 
+		var headstr = "<html><head><title></title></head><body>"; 
+		var footstr = "</body>"; 
+		var newstr = document.all.item(printpage).innerHTML; 
+		var oldstr = document.body.innerHTML; 
+			document.body.innerHTML = headstr+newstr+footstr; 
+			window.print(); 
+			document.body.innerHTML = oldstr; 
+			return false; 
+	} 
 </script>
 <?php
 	include 'timecond.php';
@@ -61,7 +71,7 @@
 ?>
 <div class='order_block' id='ob<?php echo $row_order[0];?>'>
   <div class='ob_nav' id='obnav<?php echo $row_order[0];?>'>
-	<table class ='table-stripped' id='ob_tbl'>
+	<table class ='table-stripped' class='ob_tbl' id="ob_tbl<?php echo $row_order[0];?>">
 		<tr>
 		<?php
 /**count one orders' total price and item number*/
@@ -122,12 +132,13 @@
 		<nav id='paybtn'>
 			<span id="btn2<?php echo $row_order[0];?>">
 				<form method='get' action=''>
-					<button type="primary" name='paid<?php echo $row_order[0];?>' style='display:none;'/>
+					<button type="submit" name='paid<?php echo $row_order[0];?>' style='display:none;'/>
 				</form>
-				<button type="primary"  onclick="payOrder('<?php echo $row_order[0];?>')">Pay</button>
-				<button type='submit' name='edit' onclick="submit('<?php echo $row_order[0];?>')">Edit</button>
+				<button type="primary" onclick="printdiv('obnav<?php echo $row_order[0];?>')">Print</button>
+				<button type="button"  onclick="payOrder('<?php echo $row_order[0];?>')" style='background-color:#0ab159;'>Pay</button>
+				<button type='button' name='edit' onclick="submit('<?php echo $row_order[0];?>')">Edit</button>
+				<button type='button' onclick="deleteOrder('<?php echo $row_order['Order_id'];?>')" style='background-color:#d8596b;'>Delete</button>
 				<form method='post' action=''>
-					<kbd onclick="deleteOrder('<?php echo $row_order['Order_id'];?>')">x</kbd>
 					<input id='del<?php echo $row_order['Order_id'];?>' type='submit' name='nam' value='<?php echo $row_order['Order_id'];?>' style='display:none;'/>
 				</form>
 			</span>
@@ -141,10 +152,10 @@
 /**change style if more than 3 row*/
 			if($num > 3){	
 				echo "<div id='more$row_order[0]' class='morerow' onclick='morebtn($row_order[0],$num)'>
-						&nbsp&nbsp&nbsp;<a>More</a>&nbsp &nbsp &nbsp;
+						<a>More</a>
 					</div>
 					<div id='fold$row_order[0]' class='morerow' style='display:none;' onclick='foldbtn($row_order[0])'>
-						&nbsp&nbsp&nbsp;<a>Fold</a>&nbsp &nbsp &nbsp;
+						<a>Fold</a>
 					</div>";
 			}
 			if($row_order['payed']==1){

@@ -62,12 +62,12 @@
 			window.print(); 
 			document.body.innerHTML = oldstr; 
 			return false; 
-		} 
-		function reset() {  
-			if (confirm("Do you want to reset?")) {  
+	} 
+	function reset() {  
+		if (confirm("Do you want to reset?")) {  
 				window.location.href='index.php?page=create_order';
-			}  
-		}
+		}  
+	}
 </script>
 
 		<form id='order_table' action='index.php?page=create_order' method ='post'>

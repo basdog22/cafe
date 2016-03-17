@@ -15,7 +15,7 @@ var ifweek = function (){
 <form action="<?php $page?>" method='POST'>
 	<select name="timestamp" class="select-small" id='timestamp' onchange='ifweek()'>
 		<option value='today' selected>Today</option>
-		<option value='yesterday' selected>Yesterday</option>
+		<option value='yesterday'>Yesterday</option>
 		<option value='this_week'>This Week</option>
 		<option value='this_month'>This Month</option>	
 		<option value='this_7_day'>In 7 Day</option>
