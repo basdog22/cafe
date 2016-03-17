@@ -165,8 +165,14 @@ if($action == 'cata'){
 				<tr/>";
 	}
 	echo "<tr>
-			<td class='fat' colspan='8'><b>AMOUNT TOTAL:&nbsp; &nbsp; <samp>&#165;<span id='total_all'>0</span></b></samp></td>
-			<td><button type='primary' onclick='print()'>Print</button></td>
+			<td class='fat'><b>AMOUNT TOTAL:&nbsp; &nbsp; <samp>&#165;<span id='total_all'>0</span></b></samp></td>
+			<td></td>
+			<td>&#165;<span id='day1'>0</span></td>
+			<td>&#165;<span id='day2'>0</span></td>
+			<td>&#165;<span id='day3'>0</span></td>
+			<td>&#165;<span id='day4'>0</span></td>
+			<td>&#165;<span id='day5'>0</span></td>
+			<td>&#165;<span id='day6'>0</span></td>
 		  </tr>
 		</table>
 	</div>";
@@ -182,6 +188,7 @@ if($action == 'cata'){
 						addQuan('q_{$row[3]}',{$row[1]});
 						addQuan('total_{$row[3]}',{$row[2]})
 						addQuan('total_all',{$row[2]});
+						addQuan('day{$zhou}',{$row[2]});
 				</script>";
 		}
 	}
