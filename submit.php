@@ -14,7 +14,7 @@
 			echo "<div class='forms'>
 					<fieldset class='alert alert-success'>
 					<legend class='fat'>";
-            if(isset($_SESSION['food__quantity']) && !isset($_POST)){
+            if(isset($_SESSION['food__quantity']) && !isset($_POST['fname']) && !isset($_POST['isCata'])){
 				if(isset($_SESSION['order_id'])){
 /**To edit an order, first need to DELETE previous order*/
 					$sql_del="DELETE FROM orders WHERE order_id={$_SESSION['order_id']}";
@@ -50,18 +50,27 @@
 					echo "<script> history.back(-1)</script>";
 				}
             }else if(isset($_POST['isCata'])){
-				$foodname = $_POST['foodName'];
-				if($_POST['isCata']=='food'){
-					$foodCata = $_POST['foodCata'];
-					$foodPrice = $_POST['price'];
-					$sql_newfood = "INSERT food_catalogue (cata_name,Price,catalog_id) VALUES ('$foodname',$foodPrice,$foodCata)";
-				}else if($_POST['isCata']=='cata'){
-					$cataId = $_POST['cataId'];
-					$sql_newfood = "INSERT food_catalogue (cata_name,catalog_id) VALUES ('$foodname',$cataId)";
+				$foodname = preg_replace("/\s/","",(string)$_POST['foodName']);
+				$foodPrice = preg_replace("/\s/","",(string)$_POST['price']);
+				if(!empty($foodname)){
+					if($_POST['isCata']=='food'){
+						$foodCata = $_POST['foodCata'];
+						if(isset($_POST['origId'])){
+							$foodId = $_POST['origId'];
+							$sql_newfood = "UPDATE food_catalogue SET cata_name = '$foodname',Price = $foodPrice,catalog_id = $foodCata WHERE food_id = $foodId";
+						}else{
+							$sql_newfood = "INSERT food_catalogue (cata_name,Price,catalog_id) VALUES ('$foodname',$foodPrice,$foodCata)";
+						}
+					}else if($_POST['isCata']=='cata'){
+						$cataId = $_POST['cataId'];
+						$sql_newfood = "INSERT food_catalogue (cata_name,catalog_id) VALUES ('$foodname',$cataId)";
+					}
+					$mysql->query($sql_newfood);
+					echo "Add New Food Successfully";
+					header("refresh:1;url='index.php?page=food&action=detail'");
+				}else{
+					echo "Wrong!<script>history.go(-1);</script>";
 				}
-				$mysql->query($sql_newfood);
-				echo "Add New Food Successfully";
-				header("refresh:1;url='index.php?page=food&action=detail'");
 			}
 			echo "		</legend>
 						<p>Back to Home Page in 1 seconds...</p>

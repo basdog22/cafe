@@ -227,7 +227,7 @@ print the food items and total price in a table, and hide the 'Create New' butto
 			}else{
 				echo "<script>document.getElementById('subord').disabled='true';</script>";
 			}
-/**if Session['order_id'] is isset, which means user is Editing order. The Modify order button will be disabled, because it may cause some problem*/			
+/**if Session['order_id'] is isset, which means user is Editing order. The Modify order button will be disabled, because it may cause some problem*/
 			if(isset($_SESSION['order_id'])){
 				echo "<script>document.getElementById('modord').disabled='true';</script>";
 			}

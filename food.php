@@ -16,6 +16,13 @@
 			$(".my_show").jqprint(); 
 			});
 	}
+	function firm(text,id){  
+		if(confirm(text)){
+			document.getElementById(id).submit();
+		}else{
+			return false;
+		}
+	}
 </script>
 <?php
 if(isset($_GET['action'])){
@@ -45,12 +52,14 @@ if($action == 'cata'){
 	    $result = $mysql->query($sql_fdetail);
 		
         echo "<table class ='table-stripped'>
-				<th colspan='4'>Food Category:</th>
+				<th colspan='6'>Food Category:</th>
 				<tr>
 					<td class='bold'>Food ID</td>
 					<td class='bold'>Food Name</td>
 					<td class='bold'>Food Price</td>
 					<td class='bold'>Food Type</td>
+					<td style='width:1%;'></td>
+					<td style='width:1%;'></td>
 				</tr>";
         while($row = $mysql->fetch($result)) {
             echo "<tr>
@@ -58,9 +67,22 @@ if($action == 'cata'){
 					<td>".$row['food_name']." </td>
 					<td>&#165;".$row['price']." </td>
 					<td>".$row['cata_name']." </td>
+					<td><samp onclick=\"firm('Do you want to Edit this Food?','editFood{$row['food_id']}')\">E</samp></td>
+					<td><kbd onclick=\"firm('Do you want to Delete this Food?','deleteFood{$row['food_id']}')\">X</kbd></td>
 				</tr>";
+			echo "<form action='index.php?page=food&action=new' method='post' id='editFood{$row['food_id']}'>
+					<input type='hidden' name='origFoodEdit' value='{$row['food_id']},{$row['food_name']},{$row['price']},{$row['cata_name']}'/>
+				</form>
+				<form action='' method='post' id='deleteFood{$row['food_id']}'>
+					<input type='hidden' name='origFoodDel' value='{$row['food_id']}'/>
+				</form>";
         }
         echo "</table>";
+		if(isset($_POST['origFoodDel'])){
+			$sql_delFood = "DELETE FROM food_catalogue WHERE food_id = {$_POST['origFoodDel']}";
+			$mysql->query($sql_delFood);
+			echo "<script>window.location.href='index.php?page=food&action=detail';</script>";
+		}
 }else if($action == 'sold'){
 /**Show food sold information*/
 	echo "<table class ='table-stripped'>"; 
@@ -86,12 +108,12 @@ if($action == 'cata'){
 		    }
 	    }   
     }echo "</table>";
-}else if($action== 'new'){
+}else if($action == 'new'){
 	echo "<form action='submit.php' method='post'>
 		<table>
 			<th colspan='4'> 
 				<label>New Food&nbsp;<input type='radio' name='isCata' value='food' onclick='refresh()' checked>&nbsp; &nbsp;</label><label>&nbsp; &nbsp;
-				New Food Catalogue <input type='radio' name='isCata' value='cata' onclick='hideCata()'></label>
+				New Food Category <input type='radio' name='isCata' value='cata' onclick='hideCata()'></label>
 			</th>
 		<script>
 			function refresh(){
@@ -109,7 +131,7 @@ if($action == 'cata'){
 	echo"		<tr>
 				<td class='bold' class='width-2'>Food ID</td>
 				<td class='width-2'>
-					<input type='number' maxlength='6' value='$foodId' disabled='disabled'/>
+					<input type='number' name='origId' maxlength='6' value='$foodId' disabled='disabled'/>
 					<input type='hidden' name='cataId' value=$foodId />
 				</td>
 			</tr>
@@ -123,9 +145,11 @@ if($action == 'cata'){
 					<div style='margin-left:-200px;'><b>Catalogue:</b>
 						<select name='foodCata' class='width-6'>";
 	$sql_FoodCata = "SELECT catalog_id,cata_name FROM food_catalogue WHERE price is NULL ORDER BY cata_name";						
-	$result_FoodCata = $mysql->query($sql_FoodCata);			
+	$result_FoodCata = $mysql->query($sql_FoodCata);	
+	$foodCata = array();
 		while($row = $mysql->fetch($result_FoodCata)) {
 			echo "<option value=$row[0]>$row[1]</option>";
+			$foodCata[$row[1]] = $row[0];
 		}	
 	echo"				</select>
 					</div><span>
@@ -134,7 +158,7 @@ if($action == 'cata'){
 			<tr>
 				<td class='bold'><span class='hideCata'>Price<span class='req'> *</span></span></td>
 				<td><span class='hideCata'>
-					<label>&#165;&nbsp;</label><input type='number' max='999' name='price'/>
+					<label>&#165;&nbsp;</label><input type='number' max='999' name='price' required/>
 				</span></td>
 			</tr>
 		</table>
@@ -142,6 +166,22 @@ if($action == 'cata'){
 			<button class='submit' type='primary' name='submit'>Submit</button>
 		</div>
 	</form>";
+	if(isset($_POST['origFoodEdit'])){
+			$origFood = explode(',',$_POST['origFoodEdit']);
+			echo "<script>
+					document.getElementsByName('isCata')[1].disabled = true;
+					var foodid = document.getElementsByName('origId')[0];
+					foodid.disabled = false;
+					document.getElementsByName('cataId')[0].disabled = true;
+					foodid.value = {$origFood[0]};
+					foodid.onchange = function(){
+						foodid.value = {$origFood[0]};
+					};
+					document.getElementsByName('foodName')[0].value = '{$origFood[1]}';
+					document.getElementsByName('price')[0].value = '{$origFood[2]}';
+					document.getElementsByName('foodCata')[0].value = '{$foodCata[$origFood[3]]}';
+				</script>";
+	}
 }else if($action== 'weekly'){
 	/*echo "<style>
 			input[type=range]:before { content: attr(min); padding-right: 5px; }
