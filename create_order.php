@@ -145,15 +145,13 @@ session['times'] is a counter to make sure session['order_id'] directly comes fr
 			}	
 		}						
 /**save food items detail information into array*/
-        $sql_foodinfo = "select s.food_id,s.cata_name as food_name,s.price,p.cata_name from food_catalogue as s join food_catalogue as p where p.food_id = s.catalog_id and  s.food_id != s.catalog_id;";
+        $sql_foodinfo = "SELECT food_id,cata_name AS food_name,price FROM food_catalogue WHERE price IS NOT NULL";
         $result = $mysql->query($sql_foodinfo);
         $food_cata_info = array();
-        echo "<form id='order_submit' action ='submit.php' method = 'post'>
-				<table class ='table-bordered'>";  
+        echo "<table class ='table-bordered'>";  
         while($row = $mysql->fetch($result)) {
 	        $food_cata_info['name'][$row['food_id']] = $row['food_name'];
 	        $food_cata_info['price'][$row['food_id']] = $row['price'];
-	        $food_cata_info['cata'][$row['food_id']] = $row['cata_name'];
 		}
 /**Result part(right part) of create new order*/
 /**if choose a custer,search full name and print it,or just show unknown*/
@@ -203,13 +201,12 @@ print the food items and total price in a table, and hide the 'Create New' butto
 					<td colspan='2' class='text-centered'>&#165;&nbsp".$totalp."</td>
 				 </tr>
 				 </table>
-			</form>
 			<script>document.getElementById('createbtn').style.display= 'none'</script>";
 		?>
 			<nav id='submitbtn'>
 				<ul>
 					<li>
-						<button id='subord' type="primary" onclick="document.getElementById('order_submit').submit()">Submit</button>
+						<button id='subord' type="primary" onclick="window.location.href='submit.php';">Submit</button>
 					</li>
 					<li>
 						<button onclick="printdiv('create_page')">Print</button>
@@ -235,8 +232,7 @@ print the food items and total price in a table, and hide the 'Create New' butto
 				echo "<script>document.getElementById('modord').disabled='true';</script>";
 			}
         }else{
-			echo "</table>
-			</form>";
+			echo "</table>";
 		}
         ?>
 </div>

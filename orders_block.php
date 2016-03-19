@@ -71,7 +71,7 @@
 ?>
 <div class='order_block' id='ob<?php echo $row_order[0];?>'>
   <div class='ob_nav' id='obnav<?php echo $row_order[0];?>'>
-	<table class ='table-stripped' class='ob_tbl' id="ob_tbl<?php echo $row_order[0];?>">
+	<table class ='table-stripped' id="ob_tbl<?php echo $row_order[0];?>">
 		<tr>
 		<?php
 /**count one orders' total price and item number*/

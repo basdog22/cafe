@@ -14,7 +14,7 @@
 			echo "<div class='forms'>
 					<fieldset class='alert alert-success'>
 					<legend class='fat'>";
-            if(isset($_SESSION['food__quantity'])){
+            if(isset($_SESSION['food__quantity']) && !isset($_POST)){
 				if(isset($_SESSION['order_id'])){
 /**To edit an order, first need to DELETE previous order*/
 					$sql_del="DELETE FROM orders WHERE order_id={$_SESSION['order_id']}";
@@ -49,7 +49,20 @@
 				}else{
 					echo "<script> history.back(-1)</script>";
 				}
-            }
+            }else if(isset($_POST['isCata'])){
+				$foodname = $_POST['foodName'];
+				if($_POST['isCata']=='food'){
+					$foodCata = $_POST['foodCata'];
+					$foodPrice = $_POST['price'];
+					$sql_newfood = "INSERT food_catalogue (cata_name,Price,catalog_id) VALUES ('$foodname',$foodPrice,$foodCata)";
+				}else if($_POST['isCata']=='cata'){
+					$cataId = $_POST['cataId'];
+					$sql_newfood = "INSERT food_catalogue (cata_name,catalog_id) VALUES ('$foodname',$cataId)";
+				}
+				$mysql->query($sql_newfood);
+				echo "Add New Food Successfully";
+				header("refresh:1;url='index.php?page=food&action=detail'");
+			}
 			echo "		</legend>
 						<p>Back to Home Page in 1 seconds...</p>
 						<a href='index.php'>Back to Homepage immdiately</a>

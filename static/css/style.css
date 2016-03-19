@@ -116,10 +116,10 @@ input[type="number"]{-moz-appearance:textfield;}
 	/*border: 2px solid #0ab159;
 	box-shadow: 0px 0px 5px #0ab159; */ 
 }
-.ob_tbl{
+.ob_nav table{
 	height: 274px;
 }
-.ob_tbl th{
+.ob_nav table th{
 	background: #f8f8f8;
 	font-size: 1.2em;
 	padding-top: 10px;
@@ -162,9 +162,6 @@ display: inline;
 #paid span{
 	color: #0ab159;	
 	visibility:hidden;
-}
-#report td{
-
 }
 /*DROPDOWN MENU
 nav {

@@ -41,7 +41,7 @@ if($action == 'cata'){
     echo "</table>";
 }else if($action == 'detail'){
 /**Show food detail*/
-	$sql_fdetail = "select s.food_id,s.cata_name as food_name,s.price,p.cata_name,s.catalog_id AS catid, p.catalog_id AS catid2 from food_catalogue as s join food_catalogue as p where p.catalog_id = s.catalog_id and s.price IS NOT NULL GROUP BY food_id"; 
+	$sql_fdetail = "select s.food_id,s.cata_name as food_name,s.price,p.cata_name from food_catalogue as s join food_catalogue as p where p.catalog_id = s.catalog_id and s.price IS NOT NULL GROUP BY food_id"; 
 	    $result = $mysql->query($sql_fdetail);
 		
         echo "<table class ='table-stripped'>
@@ -54,7 +54,7 @@ if($action == 'cata'){
 				</tr>";
         while($row = $mysql->fetch($result)) {
             echo "<tr>
-					<td>".($row['food_id']-10)."</td>
+					<td>".$row['food_id']."</td>
 					<td>".$row['food_name']." </td>
 					<td>&#165;".$row['price']." </td>
 					<td>".$row['cata_name']." </td>
@@ -86,6 +86,62 @@ if($action == 'cata'){
 		    }
 	    }   
     }echo "</table>";
+}else if($action== 'new'){
+	echo "<form action='submit.php' method='post'>
+		<table>
+			<th colspan='4'> 
+				<label>New Food&nbsp;<input type='radio' name='isCata' value='food' onclick='refresh()' checked>&nbsp; &nbsp;</label><label>&nbsp; &nbsp;
+				New Food Catalogue <input type='radio' name='isCata' value='cata' onclick='hideCata()'></label>
+			</th>
+		<script>
+			function refresh(){
+				window.location.href='index.php?page=food&action=new';
+			}
+			function hideCata(){
+				var cata = document.getElementsByClassName('hideCata');
+				for(var i = 0; i < cata.length;i++){
+					cata[i].style.display = 'none';
+				}
+			}
+		</script>";
+	$sql_LastFoodID = 'SELECT food_id FROM food_catalogue ORDER BY food_id DESC LIMIT 1';
+	$foodId = $mysql->fetch($mysql->query($sql_LastFoodID))[0]+1;
+	echo"		<tr>
+				<td class='bold' class='width-2'>Food ID</td>
+				<td class='width-2'>
+					<input type='number' maxlength='6' value='$foodId' disabled='disabled'/>
+					<input type='hidden' name='cataId' value=$foodId />
+				</td>
+			</tr>
+			<tr>
+				<td class='bold'>Food Name<span class='req'> *</span></td>
+				<td>
+					<input type='text' maxlength='10' name='foodName' required/>
+				</td>
+				<td class='bold'><span class='hideCata'>Food Type<span class='req'> *</span></span></td>
+				<td class='width-4'><span class='hideCata'>
+					<div style='margin-left:-200px;'><b>Catalogue:</b>
+						<select name='foodCata' class='width-6'>";
+	$sql_FoodCata = "SELECT catalog_id,cata_name FROM food_catalogue WHERE price is NULL ORDER BY cata_name";						
+	$result_FoodCata = $mysql->query($sql_FoodCata);			
+		while($row = $mysql->fetch($result_FoodCata)) {
+			echo "<option value=$row[0]>$row[1]</option>";
+		}	
+	echo"				</select>
+					</div><span>
+				</td>
+			</tr>
+			<tr>
+				<td class='bold'><span class='hideCata'>Price<span class='req'> *</span></span></td>
+				<td><span class='hideCata'>
+					<label>&#165;&nbsp;</label><input type='number' max='999' name='price'/>
+				</span></td>
+			</tr>
+		</table>
+		<div class='text-right'>
+			<button class='submit' type='primary' name='submit'>Submit</button>
+		</div>
+	</form>";
 }else if($action== 'weekly'){
 	/*echo "<style>
 			input[type=range]:before { content: attr(min); padding-right: 5px; }
@@ -123,7 +179,7 @@ if($action == 'cata'){
 			<th style='font-size:1.6em' class='text-centered' colspan='10'>Weekly's selling Food Diary: {$subdate['start']} to {$subdate['end']}</th>"; 
 	while($row_fcata = $mysql->fetch($result_fcata)) {
 		$cata_id = $row_fcata['catalog_id'];	
-        $sql_finfo = "select food_id,s.cata_name as food_name,s.price from food_catalogue as s where s.catalog_id = ".$cata_id." and s.price IS NOT NULL;";
+        $sql_finfo = "SELECT food_id,s.cata_name AS food_name,s.price FROM food_catalogue AS s WHERE s.catalog_id = ".$cata_id." AND s.price IS NOT NULL;";
 	    $result_finfo = $mysql->query($sql_finfo); 
         echo "<tr id='{$row_fcata['cata_name']}'>
 				<td class='text-centered'><b style='font-size:1.2em;'>{$row_fcata['cata_name']}</b></td>
