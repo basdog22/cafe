@@ -172,11 +172,23 @@ session['times'] is a counter to make sure session['order_id'] directly comes fr
 		$datetime = date('d/m/y h:i:s',time());
 		echo "<tr class='bold'>
 				<td style='font-size: 26px;border-right:0px;' >".$cusname."&nbsp</td>
-				<td colspan='2' style='border-left:0;text-align:right;' id='time'>$datetime</td>
+				<td colspan='2' style='border-left:0;text-align:right;' id='time' onclick='inputTime()'>$datetime</td>
+				<td colspan='2' style='border-left:0;text-align:right;display:none;' id='timeNew'>
+					<form action='submit.php' method='post' id='newOrder'>
+						<input type='time' name='time'/>
+					</form>
+				</td>
 			</tr>
             <tr class='fat'>
 				<td>Food Name</td><td>Price</td><td>Quantity</td>
 			</tr>"; 
+		echo "<script>
+				function inputTime(){
+					document.getElementById('time').style.display='none';
+					document.getElementById('timeNew').style.display='inline';
+					
+				}
+			</script>";
 /**Save all the food id and quantity in an Array, and filter the empty items,if the array is still not empty, 
 print the food items and total price in a table, and hide the 'Create New' button*/
 		$totalp = 0;
@@ -206,7 +218,7 @@ print the food items and total price in a table, and hide the 'Create New' butto
 			<nav id='submitbtn'>
 				<ul>
 					<li>
-						<button id='subord' type="primary" onclick="window.location.href='submit.php';">Submit</button>
+						<button id='subord' type="primary" onclick="document.getElementById('newOrder').submit();">Submit</button>
 					</li>
 					<li>
 						<button onclick="printdiv('create_page')">Print</button>

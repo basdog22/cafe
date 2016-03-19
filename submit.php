@@ -27,8 +27,13 @@
 				unset($_SESSION['cus_id']);
 				unset($_SESSION['food__quantity']);
 				session_destroy();
+				if(isset($_POST['time']) && !empty($_POST['time'])){
+					$time = "'{$_POST['time']}'";	
+				}else{
+					$time = 'curtime()';
+				}
                 $itemnum = count($food__quantity);
-                $sql_inserto = "INSERT orders(cus_id,date,time) VALUE($cus_id,curdate(),curtime())";
+                $sql_inserto = "INSERT orders(cus_id,date,time) VALUE($cus_id,curdate(),$time)";
                 $mysql->query($sql_inserto);
 				$order_id = mysql_insert_id();
                 for ($itemcount=0;$itemcount<$itemnum;$itemcount++) {
@@ -38,7 +43,7 @@
                     $mysql->query($sql_insertf);
                 }
                 echo "Create Order Successfully";  
-                header("refresh:1;url='index.php?page=current_orders'");				
+                header("refresh:1;url='index.php?page=current_orders'");		
             }else if(isset($_POST['fname'])){
 /**chaeck info and create a new customer*/				
 				if(!empty(preg_replace("/\s/","",(string)$_POST['fname']))){
