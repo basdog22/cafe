@@ -45,34 +45,53 @@
                 echo "Create Order Successfully";  
                 header("refresh:1;url='index.php?page=current_orders'");		
             }else if(isset($_POST['fname'])){
-/**chaeck info and create a new customer*/				
-				if(!empty(preg_replace("/\s/","",(string)$_POST['fname']))){
-					$sql_newcus= "INSERT customer_info (firstname,lastname,tel) VALUE ('".preg_replace("/\s/","",(string)$_POST['fname'])."','".preg_replace("/\s/","",(string)$_POST['lname'])."','{$_POST['tel']}')";
-					$mysql->query($sql_newcus);
-					echo "Add Customer Successfully";
+/**chaeck info and create a new customer*/	
+				$fname = preg_replace("/\s/","",(string)$_POST['fname']);
+				if(!empty($fname)){
+					$lname = preg_replace("/\s/","",(string)$_POST['lname']);
+					$tel = preg_replace("/\s/","",(string)$_POST['tel']);
+					if(isset($_POST['cusid'])){
+						$cusid = $_POST['cusid'];
+						$sql_editcus = "UPDATE customer_info SET firstname = '$fname',lastname = '$lname',tel = '$tel' WHERE cus_id = '$cusid'";
+						$mysql->query($sql_editcus);
+						echo 'Update Customer Successfully';
+					}else{
+						$sql_newcus= "INSERT customer_info (firstname,lastname,tel) VALUE ('$fname','$lname','$tel')";
+						$mysql->query($sql_newcus);
+						echo "Add Customer Successfully";
+					}
 					header("refresh:1;url='index.php?page=customer&action=info'");
 				}else{
 					echo "<script> history.back(-1)</script>";
 				}
             }else if(isset($_POST['isCata'])){
+/**create or update food item*/
 				$foodname = preg_replace("/\s/","",(string)$_POST['foodName']);
 				$foodPrice = preg_replace("/\s/","",(string)$_POST['price']);
 				if(!empty($foodname)){
 					if($_POST['isCata']=='food'){
 						$foodCata = $_POST['foodCata'];
 						if(isset($_POST['origId'])){
-							$foodId = $_POST['origId'];
-							$sql_newfood = "UPDATE food_catalogue SET cata_name = '$foodname',Price = $foodPrice,catalog_id = $foodCata WHERE food_id = $foodId";
+							$sql_newfood = "UPDATE food_catalogue SET cata_name = '$foodname',Price = $foodPrice,catalog_id = $foodCata WHERE food_id = {$_POST['origId']}";
+							echo "Update Food Information Successfully";
 						}else{
 							$sql_newfood = "INSERT food_catalogue (cata_name,Price,catalog_id) VALUES ('$foodname',$foodPrice,$foodCata)";
+							echo "Add New Food Successfully";
 						}
+						$mysql->query($sql_newfood);
+						header("refresh:1;url='index.php?page=food&action=detail'");
 					}else if($_POST['isCata']=='cata'){
-						$cataId = $_POST['cataId'];
-						$sql_newfood = "INSERT food_catalogue (cata_name,catalog_id) VALUES ('$foodname',$cataId)";
+						if(isset($_POST['origId'])){
+							$sql_newcata = "UPDATE food_catalogue SET cata_name = '$foodname' WHERE catalog_id = {$_POST['origId']}";
+							echo "Update Food Catalogue Successfully";
+						}else{
+							$cataId = $_POST['cataId'];
+							$sql_newcata = "INSERT food_catalogue (cata_name,catalog_id) VALUES ('$foodname',$cataId)";
+							echo "Add New Food Catalogue Successfully";
+						}
+						$mysql->query($sql_newcata);
+						header("refresh:1;url='index.php?page=food&action=cata'");
 					}
-					$mysql->query($sql_newfood);
-					echo "Add New Food Successfully";
-					header("refresh:1;url='index.php?page=food&action=detail'");
 				}else{
 					echo "Wrong!<script>history.go(-1);</script>";
 				}
