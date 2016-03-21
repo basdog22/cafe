@@ -25,13 +25,14 @@
 							  <li><a href="index.php?page=food&action=sold">Food sold</a></li>
 							  <li><a href="index.php?page=food&action=weekly">Weekly Report</a></li>
 						      <li class="divider"></li>
-						      <li class="dropdown-header">Manage</li>
+						      <li class="dropdown-header">Customer</li>
 						      <li><a href="index.php?page=customer&action=info">Customer info</a></li>
 							  <li><a href="index.php?page=customer&action=new">New customer</a></li>
 						      <li class="divider"></li>
 							  <li class="dropdown-header">Product</li>							  
 							  <li><a href="index.php?page=food&action=detail">Food items</a></li>
 							  <li><a href="index.php?page=food&action=cata">Food categories</a></li>
+							  <li><a href="index.php?page=food&action=new">New Food</a></li>
 						    </ul>
 						  </div>
 					</div>
@@ -47,20 +48,12 @@
 				if(!isset($_GET['action'])){
 					$_GET['action']='';
 				}
-				 if ($page == 'create_order' || ($_GET['action']=='weekly') || $_GET['action']=='sold') {
-					echo "<a href=#Sandwiches>Sandwiches</a><br/>";
-					echo "<a href=#DIY>DIY</a><br/>";
-					echo "<a href=#Meals>Meals</a><br/>";
-					echo "<a href=#Salads>Salads</a><br/>";
-					echo "<a href=#Eggs>Eggs</a> <br/>";
-					echo "<a href=#Breakfast>Breakfast</a><br/>";
-					echo "<a href=#Patisserie>Patisserie</a><br/>";
-					echo "<a href=#Coffee>Coffee</a><br/>";
-					echo "<a href=#HotChocolate>Hot Chocolate</a><br/>";
-					echo "<a href=#Tea>Tea</a><br/>";
-					echo "<a href=#Beverage>Beverage</a><br/>";
-					echo "<a href=#Milkshakes>Milkshakes</a><br/>";
-					echo "<a href=#Discounts>Discounts</a><br/>";
+				if ($page == 'create_order' || ($_GET['action']=='weekly') || $_GET['action']=='sold') {
+					$sql_fcata = "SELECT cata_name FROM food_catalogue WHERE price IS NULL ORDER BY catalog_id";
+					$res_fcata = $mysql->query($sql_fcata);
+					while($row_fcata = $mysql->fetch($res_fcata)){
+						echo "<a href=#".$row_fcata['cata_name'].">".$row_fcata['cata_name']."</a><br/>";
+					}
 				}
 				?>
 				<a href=#bottom><img src='static/img/down.png'/></a>

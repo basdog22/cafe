@@ -62,12 +62,12 @@
 			window.print(); 
 			document.body.innerHTML = oldstr; 
 			return false; 
-		} 
-		function reset() {  
-			if (confirm("Do you want to reset?")) {  
+	} 
+	function reset() {  
+		if (confirm("Do you want to reset?")) {  
 				window.location.href='index.php?page=create_order';
-			}  
-		}
+		}  
+	}
 </script>
 
 		<form id='order_table' action='index.php?page=create_order' method ='post'>
@@ -145,15 +145,13 @@ session['times'] is a counter to make sure session['order_id'] directly comes fr
 			}	
 		}						
 /**save food items detail information into array*/
-        $sql_foodinfo = "select s.food_id,s.cata_name as food_name,s.price,p.cata_name from food_catalogue as s join food_catalogue as p where p.food_id = s.catalog_id and  s.food_id != s.catalog_id;";
+        $sql_foodinfo = "SELECT food_id,cata_name AS food_name,price FROM food_catalogue WHERE price IS NOT NULL";
         $result = $mysql->query($sql_foodinfo);
         $food_cata_info = array();
-        echo "<form id='order_submit' action ='submit.php' method = 'post'>
-				<table class ='table-bordered'>";  
+        echo "<table class ='table-bordered'>";  
         while($row = $mysql->fetch($result)) {
 	        $food_cata_info['name'][$row['food_id']] = $row['food_name'];
 	        $food_cata_info['price'][$row['food_id']] = $row['price'];
-	        $food_cata_info['cata'][$row['food_id']] = $row['cata_name'];
 		}
 /**Result part(right part) of create new order*/
 /**if choose a custer,search full name and print it,or just show unknown*/
@@ -174,11 +172,23 @@ session['times'] is a counter to make sure session['order_id'] directly comes fr
 		$datetime = date('d/m/y h:i:s',time());
 		echo "<tr class='bold'>
 				<td style='font-size: 26px;border-right:0px;' >".$cusname."&nbsp</td>
-				<td colspan='2' style='border-left:0;text-align:right;' id='time'>$datetime</td>
+				<td colspan='2' style='border-left:0;text-align:right;' id='time' onclick='inputTime()'>$datetime</td>
+				<td colspan='2' style='border-left:0;text-align:right;display:none;' id='timeNew'>
+					<form action='submit.php' method='post' id='newOrder'>
+						<input type='time' name='time'/>
+					</form>
+				</td>
 			</tr>
             <tr class='fat'>
 				<td>Food Name</td><td>Price</td><td>Quantity</td>
 			</tr>"; 
+		echo "<script>
+				function inputTime(){
+					document.getElementById('time').style.display='none';
+					document.getElementById('timeNew').style.display='inline';
+					
+				}
+			</script>";
 /**Save all the food id and quantity in an Array, and filter the empty items,if the array is still not empty, 
 print the food items and total price in a table, and hide the 'Create New' button*/
 		$totalp = 0;
@@ -203,13 +213,12 @@ print the food items and total price in a table, and hide the 'Create New' butto
 					<td colspan='2' class='text-centered'>&#165;&nbsp".$totalp."</td>
 				 </tr>
 				 </table>
-			</form>
 			<script>document.getElementById('createbtn').style.display= 'none'</script>";
 		?>
 			<nav id='submitbtn'>
 				<ul>
 					<li>
-						<button id='subord' type="primary" onclick="document.getElementById('order_submit').submit()">Submit</button>
+						<button id='subord' type="primary" onclick="document.getElementById('newOrder').submit();">Submit</button>
 					</li>
 					<li>
 						<button onclick="printdiv('create_page')">Print</button>
@@ -230,13 +239,12 @@ print the food items and total price in a table, and hide the 'Create New' butto
 			}else{
 				echo "<script>document.getElementById('subord').disabled='true';</script>";
 			}
-/**if Session['order_id'] is isset, which means user is Editing order. The Modify order button will be disabled, because it may cause some problem*/			
+/**if Session['order_id'] is isset, which means user is Editing order. The Modify order button will be disabled, because it may cause some problem*/
 			if(isset($_SESSION['order_id'])){
 				echo "<script>document.getElementById('modord').disabled='true';</script>";
 			}
         }else{
-			echo "</table>
-			</form>";
+			echo "</table>";
 		}
         ?>
 </div>
