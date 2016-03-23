@@ -281,13 +281,13 @@ if($action == 'cata'){
 	    }echo "<tr>
 					<td class='text-centered'>TOTAL</td>
 					<td></td>
-					<td>&#165;<span id='1_$cata_id'>0</span></td>
-					<td>&#165;<span id='2_$cata_id'>0</span></td>
-					<td>&#165;<span id='3_$cata_id'>0</span></td>
-					<td>&#165;<span id='4_$cata_id'>0</span></td>
-					<td>&#165;<span id='5_$cata_id'>0</span></td>
-					<td>&#165;<span id='6_$cata_id'>0</td>
-					<td id='q_$cata_id'>0</td>
+					<td>&#165;<span id='1_c$cata_id'>0</span></td>
+					<td>&#165;<span id='2_c$cata_id'>0</span></td>
+					<td>&#165;<span id='3_c$cata_id'>0</span></td>
+					<td>&#165;<span id='4_c$cata_id'>0</span></td>
+					<td>&#165;<span id='5_c$cata_id'>0</span></td>
+					<td>&#165;<span id='6_c$cata_id'>0</td>
+					<td id='q_c$cata_id'>0</td>
 				</tr>
 				<tr>
 					<td class='text-centered'><b>Total Week: </b></td>
@@ -312,13 +312,14 @@ if($action == 'cata'){
 		$res = $mysql->query($sql);
 		$zhou = $dayweek - 1;
 		while($row = $mysql->fetch($res)){
-			echo "<script>changeQuan('{$zhou}_{$row[0]}',{$row[1]});
-						addQuan('q_{$row[0]}',{$row[1]});
-						addQuan('{$zhou}_{$row[3]}',{$row[2]});
-						addQuan('q_{$row[3]}',{$row[1]});
-						addQuan('total_{$row[3]}',{$row[2]})
-						addQuan('total_all',{$row[2]});
-						addQuan('day{$zhou}',{$row[2]});
+			echo "<script>
+					changeQuan('{$zhou}_{$row[0]}',{$row[1]});
+					addQuan('q_{$row[0]}',{$row[1]});
+					addQuan('{$zhou}_c{$row[3]}',{$row[2]});
+					addQuan('q_c{$row[3]}',{$row[1]});
+					addQuan('total_{$row[3]}',{$row[2]});
+					addQuan('total_all',{$row[2]});
+					addQuan('day{$zhou}',{$row[2]});
 				</script>";
 		}
 	}
