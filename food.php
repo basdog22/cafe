@@ -37,15 +37,31 @@ if($action == 'cata'){
     echo "<table class ='table-stripped'>
 			<th colspan='2'>Food catalogue:</th>
 			<tr>
-				<td class='bold'>Catalogue ID</td><td class='bold'>Catalogue Name</td>
+				<td class='bold'>Catalogue ID</td>
+				<td class='bold'>Catalogue Name</td>
+				<td style='width:1%;'></td>
+				<td style='width:1%;'></td>
 			</tr>";
     while($row_fcata = $mysql->fetch($result_fcata)) {
         echo "<tr>
 				<td>".$row_fcata['catalog_id']."</td>
 				<td>".$row_fcata['cata_name']." </td>
+				<td><samp onclick=\"firm('Do you want to Edit this Food Type?','editCata{$row_fcata['catalog_id']}')\">E</samp></td>
+				<td><kbd onclick=\"firm('Do you want to Delete this Food Type?','deleteCata{$row_fcata['catalog_id']}')\">X</kbd></td>
 			</tr>";
+		echo "<form action='index.php?page=food&action=new' method='post' id='editCata{$row_fcata['catalog_id']}'>
+					<input type='hidden' name='origCataEdit' value='{$row_fcata['catalog_id']},{$row_fcata['cata_name']}'/>
+				</form>
+				<form action='' method='post' id='deleteCata{$row_fcata['catalog_id']}'>
+					<input type='hidden' name='origCataDel' value='{$row_fcata['catalog_id']}'/>
+				</form>";
     }
     echo "</table>";
+	if(isset($_POST['origCataDel'])){
+			$sql_delFood = "DELETE FROM food_catalogue WHERE catalog_id = {$_POST['origCataDel']}";
+			$mysql->query($sql_delFood);
+			echo "<script>window.location.href='index.php?page=food&action=cata';</script>";
+		}
 }else if($action == 'detail'){
 /**Show food detail*/
 	$sql_fdetail = "select s.food_id,s.cata_name as food_name,s.price,p.cata_name from food_catalogue as s join food_catalogue as p where p.catalog_id = s.catalog_id and s.price IS NOT NULL GROUP BY food_id"; 
@@ -78,6 +94,7 @@ if($action == 'cata'){
 				</form>";
         }
         echo "</table>";
+/**Delete food item function*/
 		if(isset($_POST['origFoodDel'])){
 			$sql_delFood = "DELETE FROM food_catalogue WHERE food_id = {$_POST['origFoodDel']}";
 			$mysql->query($sql_delFood);
@@ -121,6 +138,7 @@ if($action == 'cata'){
 			}
 			function hideCata(){
 				var cata = document.getElementsByClassName('hideCata');
+				document.getElementsByName('price')[0].required = false;
 				for(var i = 0; i < cata.length;i++){
 					cata[i].style.display = 'none';
 				}
@@ -132,13 +150,14 @@ if($action == 'cata'){
 				<td class='bold' class='width-2'>Food ID</td>
 				<td class='width-2'>
 					<input type='number' name='origId' maxlength='6' value='$foodId' disabled='disabled'/>
-					<input type='hidden' name='cataId' value=$foodId />
+					<input type='hidden' name='cataId' value='$foodId' />
+					<!--save latest id number for insert new catalogue(set food_id = catalogue_id for each food cata) -->
 				</td>
 			</tr>
 			<tr>
 				<td class='bold'>Food Name<span class='req'> *</span></td>
 				<td>
-					<input type='text' maxlength='10' name='foodName' required/>
+					<input type='text' maxlength='30' name='foodName' required/>
 				</td>
 				<td class='bold'><span class='hideCata'>Food Type<span class='req'> *</span></span></td>
 				<td class='width-4'><span class='hideCata'>
@@ -152,7 +171,7 @@ if($action == 'cata'){
 			$foodCata[$row[1]] = $row[0];
 		}	
 	echo"				</select>
-					</div><span>
+					</div></span>
 				</td>
 			</tr>
 			<tr>
@@ -167,20 +186,35 @@ if($action == 'cata'){
 		</div>
 	</form>";
 	if(isset($_POST['origFoodEdit'])){
-			$origFood = explode(',',$_POST['origFoodEdit']);
-			echo "<script>
-					document.getElementsByName('isCata')[1].disabled = true;
-					var foodid = document.getElementsByName('origId')[0];
-					foodid.disabled = false;
-					document.getElementsByName('cataId')[0].disabled = true;
+		$origFood = explode(',',$_POST['origFoodEdit']);
+		echo "<script>
+				document.getElementsByName('isCata')[1].disabled = true;
+				var foodid = document.getElementsByName('origId')[0];
+				foodid.disabled = false;
+				document.getElementsByName('cataId')[0].disabled = true;
+				foodid.value = {$origFood[0]};
+				foodid.onchange = function(){
 					foodid.value = {$origFood[0]};
-					foodid.onchange = function(){
-						foodid.value = {$origFood[0]};
-					};
-					document.getElementsByName('foodName')[0].value = '{$origFood[1]}';
-					document.getElementsByName('price')[0].value = '{$origFood[2]}';
-					document.getElementsByName('foodCata')[0].value = '{$foodCata[$origFood[3]]}';
-				</script>";
+				};
+				document.getElementsByName('foodName')[0].value = '{$origFood[1]}';
+				document.getElementsByName('price')[0].value = '{$origFood[2]}';
+				document.getElementsByName('foodCata')[0].value = '{$foodCata[$origFood[3]]}';
+			</script>";
+	}else if(isset($_POST['origCataEdit'])){
+		$origCata = explode(',',$_POST['origCataEdit']);
+		echo "<script>
+				hideCata();
+				document.getElementsByName('isCata')[0].disabled = true;
+				document.getElementsByName('isCata')[1].checked = true;
+				var foodid = document.getElementsByName('origId')[0];
+				foodid.disabled = false;
+				document.getElementsByName('cataId')[0].disabled = true;
+				foodid.value = {$origCata[0]};
+				foodid.onchange = function(){
+					foodid.value = {$origCata[0]};
+				};
+				document.getElementsByName('foodName')[0].value = '{$origCata[1]}';
+			</script>";
 	}
 }else if($action== 'weekly'){
 	/*echo "<style>
