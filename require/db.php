@@ -5,7 +5,7 @@
 	}
 	function getConn(){
         $conn =  mysql_connect('localhost','root','') or die("Cannot connect to server".mysql_error());
-        mysql_select_db("cafe",$conn) or die("Cannot use this Database");
+        mysql_select_db("cafe_test",$conn) or die("Cannot use this Database");
         mysql_query("set names gbk");
         return $conn;
     }
