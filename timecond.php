@@ -31,6 +31,7 @@ var ifweek = function (){
 		Week:<input type='number' name='weeknum' id='weeknum' placeholder='Week' min='0' max='53' value='<?php echo $weeknum;?>'/>
 		Year:<input type='number' name='yearnum' id='yearnum' placeholder='Year' min='2015' max='<?php echo $yearnum;?>' value='<?php echo $yearnum;?>'/>
 	</div>
+	 Unpaid only <input type='checkbox' name='unpaid'/>
 	<button type='submit' value='OK'>OK</button>
 </form>
 <?php
@@ -60,5 +61,16 @@ var ifweek = function (){
 	}else{
 		$condition=$today;
 		$timestamp='today';
+	}
+	if(isset($_POST['unpaid'])){
+		echo "<script>document.getElementsByName('unpaid')[0].checked = true</script>";
+		if($timestamp == 'all'){
+			$condition = 'WHERE payed = 0';
+		}else{
+			$condition .= ' AND payed = 0';
+		}
+		$unpaidAdj = '<mark>unpaid</mark>';
+	}else{
+		$unpaidAdj = '';
 	}
 ?>
