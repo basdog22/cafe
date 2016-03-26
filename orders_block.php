@@ -6,8 +6,8 @@
 		document.getElementById('paid'+orid).style.visibility='visible';
 		document.getElementById('btn2'+orid).style.display='none';
 		if(document.getElementById('more'+orid)){
-			document.getElementById('more'+orid).style.marginLeft='240px'; 
-			document.getElementById('fold'+orid).style.marginLeft='240px';
+			document.getElementById('more'+orid).style.marginLeft='200px'; 
+			document.getElementById('fold'+orid).style.marginLeft='200px';
 		}		
 	}
 	function submit(orid){
@@ -175,7 +175,7 @@
 		}
 /**if row_item is not empty,row_order must not be empty(no orders).Because it's outside of while loop,so it only can use row_item*/		
 	if(empty($row_item)){
-		echo "No orders for $timestamp yet";
+		echo "No $unpaidAdj orders for <samp>$timestamp</samp> yet";
 	}
 	
 ?>

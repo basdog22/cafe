@@ -47,7 +47,7 @@ if($action == 'cata'){
 				<td>".$row_fcata['catalog_id']."</td>
 				<td>".$row_fcata['cata_name']." </td>
 				<td><samp onclick=\"firm('Do you want to Edit this Food Type?','editCata{$row_fcata['catalog_id']}')\">E</samp></td>
-				<td><kbd onclick=\"firm('Do you want to Delete this Food Type?','deleteCata{$row_fcata['catalog_id']}')\">X</kbd></td>
+				<td><kbd onclick=\"firm('Do you want to Delete this Food Type and all of its sub food items?','deleteCata{$row_fcata['catalog_id']}')\">X</kbd></td>
 			</tr>";
 		echo "<form action='index.php?page=food&action=new' method='post' id='editCata{$row_fcata['catalog_id']}'>
 					<input type='hidden' name='origCataEdit' value='{$row_fcata['catalog_id']},{$row_fcata['cata_name']}'/>
