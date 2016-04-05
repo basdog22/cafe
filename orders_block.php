@@ -46,15 +46,19 @@
 			document.getElementById('del'+orid).click();
 		}
 	}
-	function printdiv(printpage) { 
-		var headstr = "<html><head><title></title></head><body>"; 
-		var footstr = "</body>"; 
-		var newstr = document.all.item(printpage).innerHTML; 
-		var oldstr = document.body.innerHTML; 
-			document.body.innerHTML = headstr+newstr+footstr; 
-			window.print(); 
-			document.body.innerHTML = oldstr; 
-			return false; 
+	function printdiv(orid) { 
+		var request = new XMLHttpRequest();
+		request.open("GET", 'http://192.168.1.199/cafe/printorder.php?id=' + orid, true);
+		request.send(null);
+		
+		//var headstr = "<html><head><title></title></head><body>"; 
+		//var footstr = "</body>"; 
+		//var newstr = document.all.item(printpage).innerHTML; 
+		//var oldstr = document.body.innerHTML; 
+		//	document.body.innerHTML = headstr+newstr+footstr; 
+		//	window.print(); 
+		//	document.body.innerHTML = oldstr; 
+		//	return false; 
 	} 
 </script>
 <?php
@@ -134,7 +138,7 @@
 				<form method='get' action=''>
 					<button type="submit" name='paid<?php echo $row_order[0];?>' style='display:none;'/>
 				</form>
-				<button type="primary" onclick="printdiv('obnav<?php echo $row_order[0];?>')">Print</button>
+				<button type="primary" onclick="printdiv('<?php echo $row_order[0];?>')">Print</button>
 				<button type="button"  onclick="payOrder('<?php echo $row_order[0];?>')" style='background-color:#0ab159;'>Pay</button>
 				<button type='button' name='edit' onclick="submit('<?php echo $row_order[0];?>')">Edit</button>
 				<button type='button' onclick="deleteOrder('<?php echo $row_order['Order_id'];?>')" style='background-color:#d8596b;'>Delete</button>
