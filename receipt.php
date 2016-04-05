@@ -1,7 +1,7 @@
 <?php
 
-require __DIR__ . 'printer/autoload.php';
-require __DIR__ . 'require/db.php';
+require __DIR__ . '/printer/autoload.php';
+require __DIR__ . '/require/db.php';
 use Mike42\Escpos\Printer;
 use Mike42\Escpos\EscposImage;
 use Mike42\Escpos\PrintConnectors\FilePrintConnector;
@@ -12,7 +12,7 @@ $connector = new FilePrintConnector("php://stdout");
 $printer = new Printer($connector);
 
 /* Open file to write the ID */
-$file = fopen("id.txt","r") or die ("asdsd");
+$file = fopen("receipts/id.txt","r") or die ("asdsd");
 $id = fgets($file);
 fclose($file);
 
